@@ -22,9 +22,24 @@ public class NavigationActivity extends AppCompatActivity
         setContentView(R.layout.activity_navigation);
 
 
+        prepareToolbar();
+
+
+        NavigationView navigationView = (NavigationView) findViewById(R.id.nav_view);
+        navigationView.setNavigationItemSelectedListener(this);
+    }
+
+
+    private void prepareToolbar() {
+
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
 
+        prepareDrawer(toolbar);
+
+    }
+
+    private void prepareDrawer(Toolbar toolbar) {
 
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
 
@@ -35,8 +50,6 @@ public class NavigationActivity extends AppCompatActivity
 
         toggle.syncState();
 
-        NavigationView navigationView = (NavigationView) findViewById(R.id.nav_view);
-        navigationView.setNavigationItemSelectedListener(this);
     }
 
     @Override
@@ -74,6 +87,39 @@ public class NavigationActivity extends AppCompatActivity
     @SuppressWarnings("StatementWithEmptyBody")
     @Override
     public boolean onNavigationItemSelected(MenuItem item) {
+
+        switch (item.getItemId()) {
+
+            case R.id.item_nav_myWorks:
+
+
+                break;
+
+            case R.id.item_nav_masters:
+
+
+                break;
+
+            case R.id.item_nav_sketches:
+
+
+                break;
+
+            case R.id.item_nav_news:
+
+
+                break;
+
+            case R.id.item_nav_favorite:
+
+
+                break;
+
+            case R.id.item_nav_map:
+
+
+                break;
+        }
 
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
         drawer.closeDrawer(GravityCompat.START);
