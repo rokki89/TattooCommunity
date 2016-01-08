@@ -12,6 +12,7 @@ import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.widget.Toast;
 
 public class NavigationActivity extends AppCompatActivity
         implements NavigationView.OnNavigationItemSelectedListener {
@@ -92,6 +93,7 @@ public class NavigationActivity extends AppCompatActivity
 
             case R.id.item_nav_myWorks:
 
+                Toast.makeText(this, item.getTitle(), Toast.LENGTH_LONG).show();
 
                 break;
 
