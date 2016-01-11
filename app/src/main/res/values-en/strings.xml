@@ -1,9 +1,10 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <string name="item_nav_myWorks">Мои работы</string>
-    <string name="item_nav_masters">Мастера</string>
-    <string name="item_nav_sketches">Эскизы</string>
-    <string name="item_nav_news">Новости</string>
-    <string name="item_nav_map">Карта</string>
-    <string name="item_nav_favorite">Избранное</string>
+    <string name="app_name">Tattoo Community</string>
+    <string name="item_nav_myWorks">My portfolio</string>
+    <string name="item_nav_masters">Find master</string>
+    <string name="item_nav_sketches">Find sketch</string>
+    <string name="item_nav_news">News</string>
+    <string name="item_nav_map">Map</string>
+    <string name="item_nav_favorite">Favorite</string>
 </resources>

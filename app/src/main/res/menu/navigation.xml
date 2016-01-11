@@ -1,9 +1,33 @@
 <?xml version="1.0" encoding="utf-8"?>
 <menu xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto">
+
     <item
         android:id="@+id/action_settings"
-        android:orderInCategory="100"
+        android:icon="@drawable/ic_settings"
+        android:orderInCategory="400"
         android:title="@string/action_settings"
-        app:showAsAction="never" />
+        app:showAsAction="always" />
+
+    <item
+        android:id="@+id/action_grid"
+        android:icon="@drawable/ic_action_grid"
+        android:orderInCategory="100"
+        android:title="Показать сеткой"
+        app:showAsAction="always" />
+
+    <item
+        android:id="@+id/action_list"
+        android:icon="@drawable/ic_action_list"
+        android:orderInCategory="200"
+        android:title="Показать списком"
+        app:showAsAction="always" />
+
+    <item
+        android:id="@+id/action_filter"
+        android:icon="@drawable/ic_action_filter"
+        android:orderInCategory="300"
+        android:title="Фильтры"
+        app:showAsAction="always" />
+
 </menu>

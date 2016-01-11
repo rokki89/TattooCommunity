@@ -1,14 +1,19 @@
 <resources>
-    <string name="app_name">TattooCommunity</string>
+
+    <string name="app_name">Тату сообщество</string>
+
+    <string name="parseApplicationId">UHxp2Bcggv1dZWQCby9pywv23J77EJGlAnouvOo7</string>
+    <string name="parseClientKey">KYGpNxtu57K6xRo6mci3YPFalci50xaASxohLGvy</string>
 
     <string name="navigation_drawer_open">Open navigation drawer</string>
     <string name="navigation_drawer_close">Close navigation drawer</string>
 
-    <string name="action_settings">Settings</string>
-    <string name="item_nav_myWorks">Мои работы</string>
-    <string name="item_nav_masters">Мастера</string>
-    <string name="item_nav_sketches">Эскизы</string>
+    <string name="action_settings">Настройка профиля</string>
+    <string name="item_nav_myWorks">Мое портфолио</string>
+    <string name="item_nav_masters">Найти мастера</string>
+    <string name="item_nav_sketches">Найти эскиз</string>
     <string name="item_nav_news">Новости</string>
     <string name="item_nav_map">Карта</string>
     <string name="item_nav_favorite">Избранное</string>
+
 </resources>

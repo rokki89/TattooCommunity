@@ -1,9 +1,8 @@
 package com.fedor.pavel.tattoocommunity;
 
 import android.os.Bundle;
-import android.support.design.widget.FloatingActionButton;
-import android.support.design.widget.Snackbar;
-import android.view.View;
+import android.support.v4.app.Fragment;
+import android.support.v4.app.FragmentTransaction;
 import android.support.design.widget.NavigationView;
 import android.support.v4.view.GravityCompat;
 import android.support.v4.widget.DrawerLayout;
@@ -12,10 +11,22 @@ import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuItem;
-import android.widget.Toast;
+
+
+import com.fedor.pavel.tattoocommunity.fragments.ProfileFragment;
+import com.parse.LogInCallback;
+import com.parse.ParseException;
+import com.parse.ParseGeoPoint;
+import com.parse.ParseUser;
+
 
 public class NavigationActivity extends AppCompatActivity
         implements NavigationView.OnNavigationItemSelectedListener {
+
+    private DrawerLayout drawer;
+    private NavigationView navigationView;
+
+    // TODO: 09.01.2016 Преопределить вьюхи и расширить их поведение (добавить круглую аватарку)
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -23,26 +34,55 @@ public class NavigationActivity extends AppCompatActivity
         setContentView(R.layout.activity_navigation);
 
 
-        prepareToolbar();
+
+        findViews();
+
+        prepareNavigationView();
+
+        ParseUser.logOut();
 
 
-        NavigationView navigationView = (NavigationView) findViewById(R.id.nav_view);
-        navigationView.setNavigationItemSelectedListener(this);
+        ParseUser.logInInBackground("pavelbjorn@gmai.com", "1234", new LogInCallback() {
+            @Override
+            public void done(ParseUser user, ParseException e) {
+
+                if (e == null) {
+                    replaceFragment(new ProfileFragment(), R.id.activity_navigation_fragment_container);
+                }
+
+            }
+        });
+
+
+
+        /*replaceFragment(new ProfileFragment(), R.id.activity_navigation_fragment_container);*/
+
     }
 
-
-    private void prepareToolbar() {
-
-        Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
-        setSupportActionBar(toolbar);
-
+    @Override
+    public void setSupportActionBar(Toolbar toolbar) {
+        super.setSupportActionBar(toolbar);
         prepareDrawer(toolbar);
+    }
+
+    private void prepareNavigationView() {
+
+        navigationView = (NavigationView) findViewById(R.id.nav_view);
+        navigationView.setNavigationItemSelectedListener(this);
+        navigationView.setCheckedItem(R.id.item_nav_myWorks);
+    }
+
+    private void replaceFragment(Fragment fragment, int containerId) {
+
+        android.support.v4.app.FragmentManager fm = getSupportFragmentManager();
+        FragmentTransaction transaction = fm.beginTransaction();
+        transaction.replace(containerId, fragment);
+        transaction.commit();
 
     }
 
     private void prepareDrawer(Toolbar toolbar) {
 
-        DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
 
         ActionBarDrawerToggle toggle = new ActionBarDrawerToggle(
                 this, drawer, toolbar, R.string.navigation_drawer_open, R.string.navigation_drawer_close);
@@ -50,6 +90,14 @@ public class NavigationActivity extends AppCompatActivity
         drawer.setDrawerListener(toggle);
 
         toggle.syncState();
+
+    }
+
+    private void findViews() {
+
+        drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
+
+        navigationView = (NavigationView) findViewById(R.id.nav_view);
 
     }
 
@@ -65,19 +113,16 @@ public class NavigationActivity extends AppCompatActivity
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
-        // Inflate the menu; this adds items to the action bar if it is present.
-        getMenuInflater().inflate(R.menu.navigation, menu);
+
+
         return true;
     }
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
-        // Handle action bar item clicks here. The action bar will
-        // automatically handle clicks on the Home/Up button, so long
-        // as you specify a parent activity in AndroidManifest.xml.
+
         int id = item.getItemId();
 
-        //noinspection SimplifiableIfStatement
         if (id == R.id.action_settings) {
             return true;
         }
@@ -93,7 +138,13 @@ public class NavigationActivity extends AppCompatActivity
 
             case R.id.item_nav_myWorks:
 
-                Toast.makeText(this, item.getTitle(), Toast.LENGTH_LONG).show();
+                if (getSupportFragmentManager().findFragmentById(R.id.activity_navigation_fragment_container) instanceof ProfileFragment) {
+
+                    break;
+
+                }
+
+                replaceFragment(new ProfileFragment(), R.id.activity_navigation_fragment_container);
 
                 break;
 
@@ -117,14 +168,13 @@ public class NavigationActivity extends AppCompatActivity
 
                 break;
 
-            case R.id.item_nav_map:
 
-
-                break;
         }
 
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
         drawer.closeDrawer(GravityCompat.START);
         return true;
     }
+
+
 }
