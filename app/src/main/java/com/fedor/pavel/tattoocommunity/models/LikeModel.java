@@ -32,7 +32,6 @@ public class LikeModel extends ParseObject {
 
     }
 
-
     public String getPostId() {
 
         return getString(POST_ID_PARSE_KEY);
@@ -50,7 +49,6 @@ public class LikeModel extends ParseObject {
         return getBoolean(IS_LIKE_PARSE_KEY);
 
     }
-
 
     public void setPostId(String postId) {
 
