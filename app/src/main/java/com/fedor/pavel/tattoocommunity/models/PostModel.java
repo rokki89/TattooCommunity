@@ -12,6 +12,7 @@ import java.io.ByteArrayOutputStream;
 @ParseClassName("Post")
 public class PostModel extends ParseObject {
 
+    private int numOfLikes;
 
     public static final String TITLE_PARSE_KEY = "title";
 
@@ -24,6 +25,7 @@ public class PostModel extends ParseObject {
     public static final String TYPE_PARSE_KEY = "type";
 
     public static final String DESCRIPTION_PARSE_KEY = "description";
+
 
     public PostModel() {
 
@@ -97,9 +99,21 @@ public class PostModel extends ParseObject {
 
     }
 
+    public int getNumOfLikes() {
+
+        return numOfLikes;
+
+    }
+
     public String getDescription() {
 
         return getString(DESCRIPTION_PARSE_KEY);
+
+    }
+
+    public void setNumOfLikes(int numOfLikes) {
+
+        this.numOfLikes = numOfLikes;
 
     }
 
@@ -123,7 +137,7 @@ public class PostModel extends ParseObject {
 
     public void setUserId(String userId) {
 
-        setUserId(userId);
+        put(USER_ID_PARSE_KEY, userId);
 
     }
 
