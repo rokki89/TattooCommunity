@@ -16,4 +16,25 @@
     <string name="item_nav_map">Карта</string>
     <string name="item_nav_favorite">Избранное</string>
 
+    <string name="last_photos">Последние работы</string>
+    <string name="choice_category">Выберите категории поиска</string>
+
+    <string name="checkbox_category_allWorks">все работы</string>
+    <string name="checkbox_category_other">другое</string>
+    <string name="checkbox_category_realism">реализм</string>
+    <string name="checkbox_category_Japan">Япония</string>
+    <string name="checkbox_category_Polinezia">Полинезия</string>
+    <string name="checkbox_category_blackwork">блэкворк</string>
+    <string name="checkbox_category_trible">трайбл</string>
+    <string name="checkbox_category_dotwork">дотворк</string>
+    <string name="checkbox_category_chikano">чикано</string>
+    <string name="checkbox_category_trashpolka">трэш-полька</string>
+    <string name="checkbox_category_oriental">ориентал</string>
+    <string name="checkbox_category_newschool">new school</string>
+    <string name="checkbox_category_oldschool">old school</string>
+    <string name="checkbox_category_celtic">кельтика</string>
+
+
+    <string name="hello_blank_fragment">Hello blank fragment</string>
+
 </resources>
