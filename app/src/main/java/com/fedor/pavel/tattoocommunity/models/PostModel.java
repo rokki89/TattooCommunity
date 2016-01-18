@@ -12,7 +12,11 @@ import java.io.ByteArrayOutputStream;
 @ParseClassName("Post")
 public class PostModel extends ParseObject {
 
-    private int numOfLikes;
+
+    private LikeModel like;
+
+
+    public static final String NUM_OF_LIKES_PARSE_KEY = "num_of_likes";
 
     public static final String TITLE_PARSE_KEY = "title";
 
@@ -26,12 +30,15 @@ public class PostModel extends ParseObject {
 
     public static final String DESCRIPTION_PARSE_KEY = "description";
 
+    public static final String PHOTO_WIDTH_PARSE_KEY = "photo_width";
+
+    public static final String PHOTO_HEIGHT_PARSE_KEY = "photo_height";
 
     public PostModel() {
 
     }
 
-    public PostModel(String title, String userId, String categoryId, String description, int type, Bitmap photo) {
+    public PostModel(String title, String userId, int categoryId, String description, int type, Bitmap photo) {
 
         setTitle(title);
 
@@ -47,7 +54,7 @@ public class PostModel extends ParseObject {
 
     }
 
-    public PostModel(String title, String userId, String categoryId, String description, int type) {
+    public PostModel(String title, String userId, int categoryId, String description, int type) {
 
         setTitle(title);
 
@@ -87,21 +94,27 @@ public class PostModel extends ParseObject {
 
     }
 
-    public String getCategoryId() {
+    public int getCategoryId() {
 
-        return getString(CATEGORY_ID_PARSE_KEY);
+        return getInt(CATEGORY_ID_PARSE_KEY);
 
     }
 
-    public int getTYPE() {
+    public int getType() {
 
         return getInt(TYPE_PARSE_KEY);
 
     }
 
+    public LikeModel getLike() {
+
+        return like;
+
+    }
+
     public int getNumOfLikes() {
 
-        return numOfLikes;
+        return getInt(NUM_OF_LIKES_PARSE_KEY);
 
     }
 
@@ -111,9 +124,21 @@ public class PostModel extends ParseObject {
 
     }
 
+    public int getPhotoWidth() {
+
+        return getInt(PHOTO_WIDTH_PARSE_KEY);
+
+    }
+
+    public int getPhotoHeight() {
+
+        return getInt(PHOTO_HEIGHT_PARSE_KEY);
+
+    }
+
     public void setNumOfLikes(int numOfLikes) {
 
-        this.numOfLikes = numOfLikes;
+        put(NUM_OF_LIKES_PARSE_KEY, numOfLikes);
 
     }
 
@@ -126,6 +151,10 @@ public class PostModel extends ParseObject {
     public void setPhoto(Bitmap photo) {
 
         put(PHOTO_PARSE_KEY, new ParseFile("postPhoto.jpg", toByteArray(photo)));
+
+        put(PHOTO_WIDTH_PARSE_KEY, photo.getWidth());
+
+        put(PHOTO_HEIGHT_PARSE_KEY, photo.getHeight());
 
     }
 
@@ -141,7 +170,7 @@ public class PostModel extends ParseObject {
 
     }
 
-    public void setCategoryId(String categoryId) {
+    public void setCategoryId(int categoryId) {
 
         put(CATEGORY_ID_PARSE_KEY, categoryId);
 
@@ -150,6 +179,12 @@ public class PostModel extends ParseObject {
     public void setDescription(String description) {
 
         put(DESCRIPTION_PARSE_KEY, description);
+
+    }
+
+    public void setLikeModel(LikeModel like) {
+
+        this.like = like;
 
     }
 
