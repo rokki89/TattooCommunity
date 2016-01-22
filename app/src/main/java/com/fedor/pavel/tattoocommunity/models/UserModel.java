@@ -26,6 +26,8 @@ public class UserModel extends ParseUser {
 
     public static final String ABOUT_SELF_PARSE_KEY = "aboutSelf";
 
+    public static final String PLACE_PARSE_KEY = "place";
+
 
     public UserModel() {
 
@@ -63,9 +65,17 @@ public class UserModel extends ParseUser {
 
     }
 
-    public String getPhoneUrl() {
+    public String getPhone() {
 
-        return getString(PHONE_PARSE_KEY);
+        String phone = getString(PHONE_PARSE_KEY);
+
+        if (phone == null) {
+
+            return "-";
+
+        }
+
+        return phone;
 
     }
 
@@ -78,6 +88,12 @@ public class UserModel extends ParseUser {
     public String getAboutSelf() {
 
         return getString(ABOUT_SELF_PARSE_KEY);
+
+    }
+
+    public PlaceModel getPlace() {
+
+        return (PlaceModel) getParseObject(PLACE_PARSE_KEY);
 
     }
 
@@ -119,6 +135,12 @@ public class UserModel extends ParseUser {
     public void setAboutSelf(String aboutSelf) {
 
         put(ABOUT_SELF_PARSE_KEY, aboutSelf);
+
+    }
+
+    public void setPlace(PlaceModel place) {
+
+        put(PLACE_PARSE_KEY, place);
 
     }
 

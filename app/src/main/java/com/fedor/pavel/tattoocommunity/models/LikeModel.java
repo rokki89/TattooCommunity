@@ -15,10 +15,8 @@ public class LikeModel extends ParseObject {
     public static final String IS_LIKE_PARSE_KEY = "is_like";
 
 
-
     public LikeModel() {
 
-        setLike(false);
 
     }
 

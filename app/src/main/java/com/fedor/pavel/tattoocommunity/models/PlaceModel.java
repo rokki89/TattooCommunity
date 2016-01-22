@@ -23,7 +23,7 @@ public class PlaceModel extends ParseObject {
 
     }
 
-    public PlaceModel(String userId, String cityId, String street, String name, int lat, int lng) {
+    public PlaceModel(String userId, String cityId, String street, String name, double lat, double lng) {
 
         setUserId(userId);
 
@@ -106,7 +106,7 @@ public class PlaceModel extends ParseObject {
 
     }
 
-    public void setCoordinates(float lat, float lng) {
+    public void setCoordinates(double lat, double lng) {
 
         put(COORDINATES_PARSE_KEY, new ParseGeoPoint(lat, lng));
 
