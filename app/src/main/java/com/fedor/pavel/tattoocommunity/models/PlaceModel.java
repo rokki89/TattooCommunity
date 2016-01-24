@@ -13,6 +13,8 @@ public class PlaceModel extends ParseObject {
 
     public static final String CITY_ID_PARSE_KEY = "city_id";
 
+    public static final String COUNTRY_ID_PARSE_KEY = "country_id";
+
     public static final String STREET_PARSE_KEY = "street";
 
     public static final String NAME_PARSE_KEY = "name";

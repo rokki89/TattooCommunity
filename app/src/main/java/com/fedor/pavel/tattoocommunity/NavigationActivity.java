@@ -1,5 +1,6 @@
 package com.fedor.pavel.tattoocommunity;
 
+import android.app.ProgressDialog;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentTransaction;
@@ -9,14 +10,18 @@ import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 
 
 import com.fedor.pavel.tattoocommunity.fragments.ProfileFragment;
+import com.fedor.pavel.tattoocommunity.listeners.OnCountriesLoadListener;
+import com.fedor.pavel.tattoocommunity.models.UserModel;
+import com.fedor.pavel.tattoocommunity.task.LoadCountriesTask;
+import com.fedor.pavel.tattoocommunity.task.LoadPostsTask;
 import com.parse.LogInCallback;
 import com.parse.ParseException;
-import com.parse.ParseGeoPoint;
 import com.parse.ParseUser;
 
 
@@ -25,37 +30,54 @@ public class NavigationActivity extends AppCompatActivity
 
     private DrawerLayout drawer;
     private NavigationView navigationView;
+    private final String LOG_TAG = "NavigationActivity";
 
-    // TODO: 09.01.2016 Преопределить вьюхи и расширить их поведение (добавить круглую аватарку)
+    private ProgressDialog progressDialog;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
+
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_navigation);
 
-
+        prepareProgressDialog();
 
         findViews();
 
         prepareNavigationView();
 
-        ParseUser.logOut();
+        progressDialog.show();
 
-
-        ParseUser.logInInBackground("pavelbjorn@gmai.com", "1234", new LogInCallback() {
+        LoadCountriesTask loadCountriesTask = new LoadCountriesTask(this,new OnCountriesLoadListener() {
             @Override
-            public void done(ParseUser user, ParseException e) {
+            public void loadSuccessful() {
 
-                if (e == null) {
-                    replaceFragment(new ProfileFragment(), R.id.activity_navigation_fragment_container);
+                if (progressDialog.isShowing()) {
+
+                    progressDialog.dismiss();
+
                 }
+
+                replaceFragment(new ProfileFragment(), R.id.activity_navigation_fragment_container);
+
+            }
+
+            @Override
+            public void loadFailed(int errorCode) {
+
+
+                if (progressDialog.isShowing()) {
+
+                    progressDialog.dismiss();
+
+                }
+
+                replaceFragment(new ProfileFragment(), R.id.activity_navigation_fragment_container);
 
             }
         });
 
-
-
-        /*replaceFragment(new ProfileFragment(), R.id.activity_navigation_fragment_container);*/
+        loadCountriesTask.execute();
 
     }
 
@@ -98,6 +120,16 @@ public class NavigationActivity extends AppCompatActivity
         drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
 
         navigationView = (NavigationView) findViewById(R.id.nav_view);
+
+    }
+
+    private void prepareProgressDialog() {
+
+        progressDialog = new ProgressDialog(this);
+
+        progressDialog.setMessage("Загрузка данных");
+
+        progressDialog.setCancelable(false);
 
     }
 

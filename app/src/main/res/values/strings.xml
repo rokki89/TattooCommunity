@@ -2,6 +2,8 @@
 
     <string name="app_name">Тату сообщество</string>
 
+    <string name="create_post_activity_label">Опубликовать фото</string>
+
     <string name="parseApplicationId">UHxp2Bcggv1dZWQCby9pywv23J77EJGlAnouvOo7</string>
     <string name="parseClientKey">KYGpNxtu57K6xRo6mci3YPFalci50xaASxohLGvy</string>
 
@@ -9,12 +11,15 @@
     <string name="navigation_drawer_close">Close navigation drawer</string>
 
     <string name="action_settings">Настройка профиля</string>
+    <string name="action_create">Создать пост</string>
     <string name="item_nav_myWorks">Мое портфолио</string>
     <string name="item_nav_masters">Найти мастера</string>
-    <string name="item_nav_sketches">Посмотреть татуировки</string>
+    <string name="item_nav_sketches">Найти работы</string>
     <string name="item_nav_news">Новости</string>
     <string name="item_nav_map">Карта</string>
     <string name="item_nav_favorite">Избранное</string>
+    <string name="savingDataProgressMessage">Сохранение данных</string>
+    <string name="loadDataProgressMessage">Загрузка данных</string>
 
     <string-array name="postType">
 
@@ -39,6 +44,14 @@
         <item>Япония</item>
         <item>Другое</item>
 
+
+    </string-array>
+
+    <string-array name="photoPikerDialog">
+
+        <item>Выбрать из галереи</item>
+        <item>Сфотографировать</item>
+        <item>Удалить</item>
 
     </string-array>
 

@@ -40,25 +40,52 @@ public class ProportionalImageView extends ImageView {
 
     }
 
-    public void calculateProportion(PostModel postModel) {
+    public void displayWithProportion(PostModel postModel) {
 
-        proportion = (float) postModel.getPhotoWidth() / (float) postModel.getPhotoHeight();
+        if (postModel.getPhotoWidth() == 0 || postModel.getPhotoHeight() == 0) {
 
-        ImageLoader.getInstance().displayImage(postModel.getPhotoUrl(),this,displayImageOptions());
+            proportion = 1;
+
+        } else {
+
+            proportion = (float) postModel.getPhotoWidth() / (float) postModel.getPhotoHeight();
+
+        }
+
+        ImageLoader.getInstance().displayImage(postModel.getPhotoUrl(), this, displayImageOptions());
+
+    }
+
+    public void displayWithProportion(PostModel postModel, String url) {
+
+        if (postModel.getPhotoWidth() == 0 || postModel.getPhotoHeight() == 0) {
+
+            proportion = 1;
+
+        } else {
+
+            proportion = (float) postModel.getPhotoWidth() / (float) postModel.getPhotoHeight();
+
+        }
+
+
+        ImageLoader.getInstance().displayImage(url, this, displayImageOptions());
 
     }
 
     public static DisplayImageOptions displayImageOptions() {
 
-        return new DisplayImageOptions.Builder().showImageOnLoading(R.drawable.bg_panel_gradient)
-                .showImageForEmptyUri(R.drawable.bg_panel_gradient)
-                .showImageOnFail(R.drawable.bg_panel_gradient)
-                .imageScaleType(ImageScaleType.IN_SAMPLE_POWER_OF_2)
+        return new DisplayImageOptions.Builder().showImageOnLoading(R.drawable.default_photo)
+                .showImageForEmptyUri(R.drawable.default_photo)
+                .showImageOnFail(R.drawable.default_photo)
                 .bitmapConfig(Bitmap.Config.RGB_565)
                 .cacheInMemory(true)
                 .cacheOnDisk(true)
-                .imageScaleType(ImageScaleType.IN_SAMPLE_INT)
+                .imageScaleType(ImageScaleType.EXACTLY)
                 .build();
     }
+
+
+
 
 }

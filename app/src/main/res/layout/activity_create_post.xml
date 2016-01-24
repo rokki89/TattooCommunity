@@ -1,0 +1,125 @@
+<?xml version="1.0" encoding="utf-8"?>
+<android.support.design.widget.CoordinatorLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:fitsSystemWindows="false"
+    tools:context="com.fedor.pavel.tattoocommunity.CreatePostActivity">
+
+    <include layout="@layout/toolbar" />
+
+    <ScrollView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        app:layout_behavior="@string/appbar_scrolling_view_behavior">
+
+        <RelativeLayout xmlns:tools="http://schemas.android.com/tools"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:padding="16dp">
+
+
+            <com.fedor.pavel.tattoocommunity.views.ProportionalImageView
+                android:id="@+id/activity_create_post_imv_photo"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:background="@drawable/add_photo_frame"
+                android:padding="1dp"
+                android:scaleType="fitCenter"
+                />
+
+            <FrameLayout
+                android:id="@+id/activity_create_post_fl_panel"
+                android:layout_width="match_parent"
+                android:layout_height="48dp"
+                android:layout_alignBottom="@id/activity_create_post_imv_photo"
+                android:alpha="0"
+                android:background="#7c303f9f"
+                android:paddingEnd="8dp"
+                android:paddingLeft="8dp"
+                android:paddingRight="8dp"
+                android:paddingStart="8dp">
+
+                <ImageButton
+                    android:id="@+id/activity_create_post_ib_camera"
+                    android:layout_width="36dp"
+                    android:layout_height="36dp"
+                    android:layout_gravity="center|start"
+                    android:background="@android:color/transparent"
+                    android:src="@drawable/ib_camera_selector" />
+
+                <ImageButton
+                    android:id="@+id/activity_create_post_ib_gallery"
+                    android:layout_width="36dp"
+                    android:layout_height="36dp"
+                    android:layout_gravity="center|end"
+                    android:background="@android:color/transparent"
+                    android:src="@drawable/ib_gallery_selector" />
+
+            </FrameLayout>
+
+            <android.support.design.widget.TextInputLayout
+                android:id="@+id/activity_create_post_til_title"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_below="@id/activity_create_post_imv_photo"
+                android:layout_marginTop="16dp">
+
+                <EditText
+                    android:id="@+id/activity_create_post_edt_title"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:hint="Заголовок"
+                    android:singleLine="true" />
+
+            </android.support.design.widget.TextInputLayout>
+
+            <TextView
+                android:id="@+id/activity_create_post_tv_type"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_below="@id/activity_create_post_til_title"
+                android:layout_marginLeft="8dp"
+                android:layout_marginTop="8dp"
+                android:text="Тип:"
+                android:textColor="@color/colorAccent"
+                android:textSize="12sp" />
+
+            <android.support.v7.widget.AppCompatSpinner
+                android:id="@+id/activity_create_post_sp_type"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignParentLeft="true"
+                android:layout_alignParentStart="true"
+                android:layout_below="@id/activity_create_post_tv_type" />
+
+
+            <android.support.v7.widget.AppCompatSpinner
+                android:id="@+id/activity_create_post_sp_category"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignParentEnd="true"
+                android:layout_alignParentRight="true"
+                android:layout_below="@id/activity_create_post_tv_type"
+                android:layout_marginLeft="8dp"
+                android:layout_toEndOf="@id/activity_create_post_sp_type"
+                android:layout_toRightOf="@id/activity_create_post_sp_type" />
+
+            <TextView
+                android:id="@+id/activity_create_post_tv_category"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignLeft="@id/activity_create_post_sp_category"
+                android:layout_below="@id/activity_create_post_til_title"
+                android:layout_marginLeft="8dp"
+                android:layout_marginTop="8dp"
+                android:text="Категория:"
+                android:textColor="@color/colorAccent"
+                android:textSize="12sp" />
+
+
+        </RelativeLayout>
+
+    </ScrollView>
+</android.support.design.widget.CoordinatorLayout>

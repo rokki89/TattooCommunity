@@ -8,9 +8,10 @@ import com.parse.ParseFile;
 import com.parse.ParseObject;
 
 import java.io.ByteArrayOutputStream;
+import java.io.Serializable;
 
 @ParseClassName("Post")
-public class PostModel extends ParseObject {
+public class PostModel extends ParseObject{
 
 
     private LikeModel like;

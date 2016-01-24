@@ -7,10 +7,13 @@ import com.parse.ParseFile;
 import com.parse.ParseUser;
 
 import java.io.ByteArrayOutputStream;
+import java.io.Serializable;
 
 
 @ParseClassName("_User")
-public class UserModel extends ParseUser {
+public class UserModel extends ParseUser  {
+
+
 
     public static final String FULL_NAME_PARSE_KEY = "full_name";
 
