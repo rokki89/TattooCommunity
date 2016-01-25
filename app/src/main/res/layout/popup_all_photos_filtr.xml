@@ -1,0 +1,209 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="wrap_content"
+    android:padding="5dp"
+    android:id="@+id/popup_all_photos_filter"
+    android:layout_height="wrap_content"
+    android:background="#000"
+    android:orientation="vertical" >
+    <TextView
+        android:textSize="@dimen/checkbox_popup_categories_textSize"
+        android:layout_gravity="center"
+        android:gravity="center"
+        android:textAlignment="center"
+        android:id="@+id/textView1"
+        android:padding="10dp"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="@string/choice_category"
+        android:textColor="#fff" />
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="@drawable/popup"
+        android:orientation="vertical" >
+
+
+        <ScrollView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:id="@+id/scrollView" >
+            <LinearLayout
+                android:id="@+id/ll_popup"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical" >
+
+
+            <CheckBox
+                android:padding="@dimen/checkbox_popup_categories_padding"
+                android:buttonTint="@color/checkboxPopupCategories"
+                android:textColor="@color/checkboxPopupCategories"
+                android:textSize="@dimen/checkbox_popup_categories_textSize"
+                android:id="@+id/chb_allWorks_allPhotos_fragment"
+                android:layout_height="wrap_content"
+                android:layout_width="wrap_content"
+                android:text="@string/checkbox_category_allWorks"
+                />
+
+
+                <CheckBox
+                    android:padding="@dimen/checkbox_popup_categories_padding"
+                    android:buttonTint="@color/checkboxPopupCategories"
+                    android:textColor="@color/checkboxPopupCategories"
+                    android:textSize="@dimen/checkbox_popup_categories_textSize"
+                    android:layout_height="wrap_content"
+                    android:layout_width="wrap_content"
+                    android:text="@string/checkbox_category_trible"
+                    android:id="@+id/chb_0_allPhotos_fragment"
+                    />
+
+                <CheckBox
+                    android:padding="@dimen/checkbox_popup_categories_padding"
+                    android:buttonTint="@color/checkboxPopupCategories"
+                    android:textColor="@color/checkboxPopupCategories"
+                    android:textSize="@dimen/checkbox_popup_categories_textSize"
+                    android:layout_height="wrap_content"
+                    android:layout_width="wrap_content"
+                    android:text="@string/checkbox_category_dotwork"
+                    android:id="@+id/chb_1_allPhotos_fragment"
+                    />
+
+
+                <CheckBox
+                    android:padding="@dimen/checkbox_popup_categories_padding"
+                    android:buttonTint="@color/checkboxPopupCategories"
+                    android:textColor="@color/checkboxPopupCategories"
+                    android:textSize="@dimen/checkbox_popup_categories_textSize"
+                    android:layout_height="wrap_content"
+                    android:layout_width="wrap_content"
+                    android:text="@string/checkbox_category_newschool"
+                    android:id="@+id/chb_2_allPhotos_fragment"/>
+
+
+                <CheckBox
+                    android:padding="@dimen/checkbox_popup_categories_padding"
+                    android:buttonTint="@color/checkboxPopupCategories"
+                    android:textColor="@color/checkboxPopupCategories"
+                    android:textSize="@dimen/checkbox_popup_categories_textSize"
+                    android:layout_height="wrap_content"
+                    android:layout_width="wrap_content"
+                    android:text="@string/checkbox_category_chikano"
+                    android:id="@+id/chb_3_allPhotos_fragment"
+                    />
+
+                <CheckBox
+                    android:padding="@dimen/checkbox_popup_categories_padding"
+                    android:buttonTint="@color/checkboxPopupCategories"
+                    android:textColor="@color/checkboxPopupCategories"
+                    android:textSize="@dimen/checkbox_popup_categories_textSize"
+                    android:layout_height="wrap_content"
+                    android:layout_width="wrap_content"
+                    android:text="@string/checkbox_category_trashpolka"
+                    android:id="@+id/chb_4_allPhotos_fragment"
+                    />
+
+                <CheckBox
+                    android:padding="@dimen/checkbox_popup_categories_padding"
+                    android:buttonTint="@color/checkboxPopupCategories"
+                    android:textColor="@color/checkboxPopupCategories"
+                    android:textSize="@dimen/checkbox_popup_categories_textSize"
+                    android:layout_height="wrap_content"
+                    android:layout_width="wrap_content"
+                    android:text="@string/checkbox_category_oldschool"
+                    android:id="@+id/chb_5_allPhotos_fragment"
+                    />
+
+                <CheckBox
+                android:padding="@dimen/checkbox_popup_categories_padding"
+                android:buttonTint="@color/checkboxPopupCategories"
+                android:textColor="@color/checkboxPopupCategories"
+                android:textSize="@dimen/checkbox_popup_categories_textSize"
+                android:layout_height="wrap_content"
+                android:layout_width="wrap_content"
+                android:text="@string/checkbox_category_blackwork"
+                android:id="@+id/chb_6_allPhotos_fragment"
+                />
+
+                <CheckBox
+                    android:padding="@dimen/checkbox_popup_categories_padding"
+                    android:buttonTint="@color/checkboxPopupCategories"
+                    android:textColor="@color/checkboxPopupCategories"
+                    android:textSize="@dimen/checkbox_popup_categories_textSize"
+                    android:layout_height="wrap_content"
+                    android:layout_width="wrap_content"
+                    android:text="@string/checkbox_category_Polinezia"
+                    android:id="@+id/chb_7_allPhotos_fragment"
+                    />
+
+            <CheckBox
+                android:padding="@dimen/checkbox_popup_categories_padding"
+                android:buttonTint="@color/checkboxPopupCategories"
+                android:textColor="@color/checkboxPopupCategories"
+                android:textSize="@dimen/checkbox_popup_categories_textSize"
+                android:layout_height="wrap_content"
+                android:layout_width="wrap_content"
+                android:text="@string/checkbox_category_celtic"
+                android:id="@+id/chb_8_allPhotos_fragment"
+                />
+
+                <CheckBox
+                    android:padding="@dimen/checkbox_popup_categories_padding"
+                    android:buttonTint="@color/checkboxPopupCategories"
+                    android:textColor="@color/checkboxPopupCategories"
+                    android:textSize="@dimen/checkbox_popup_categories_textSize"
+                    android:layout_height="wrap_content"
+                    android:layout_width="wrap_content"
+                    android:text="@string/checkbox_category_realism"
+                    android:id="@+id/chb_9_allPhotos_fragment"
+                    />
+
+
+            <CheckBox
+                android:padding="@dimen/checkbox_popup_categories_padding"
+                android:buttonTint="@color/checkboxPopupCategories"
+                android:textColor="@color/checkboxPopupCategories"
+                android:textSize="@dimen/checkbox_popup_categories_textSize"
+                android:layout_height="wrap_content"
+                android:layout_width="wrap_content"
+                android:text="@string/checkbox_category_oriental"
+                android:id="@+id/chb_10_allPhotos_fragment"
+                />
+
+
+            <CheckBox
+                android:padding="@dimen/checkbox_popup_categories_padding"
+                android:buttonTint="@color/checkboxPopupCategories"
+                android:textColor="@color/checkboxPopupCategories"
+                android:textSize="@dimen/checkbox_popup_categories_textSize"
+                android:layout_height="wrap_content"
+                android:layout_width="wrap_content"
+                android:text="@string/checkbox_category_Japan"
+                android:id="@+id/chb_11_allPhotos_fragment"
+                />
+
+                <CheckBox
+                    android:padding="@dimen/checkbox_popup_categories_padding"
+                    android:buttonTint="@color/checkboxPopupCategories"
+                    android:textColor="@color/checkboxPopupCategories"
+                    android:textSize="@dimen/checkbox_popup_categories_textSize"
+                    android:layout_height="wrap_content"
+                    android:layout_width="wrap_content"
+                    android:text="@string/checkbox_category_other"
+                    android:id="@+id/chb_12_allPhotos_fragment"
+                    />
+
+
+                <Button
+                    android:id="@+id/btn_ok_popup_allPhotos_fragment"
+                    android:layout_marginTop="10dp"
+                    android:layout_gravity="center_horizontal"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="ok" />
+            </LinearLayout>
+        </ScrollView>
+
+
+    </LinearLayout>
+</LinearLayout>
