@@ -5,17 +5,21 @@ import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.graphics.Bitmap;
+import android.graphics.Point;
 import android.net.Uri;
 import android.os.AsyncTask;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
+import android.view.Display;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.WindowManager;
 import android.widget.CheckBox;
 import android.widget.CompoundButton;
 import android.widget.FrameLayout;
 import android.widget.ImageButton;
+import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.fedor.pavel.tattoocommunity.CreatePostActivity;
@@ -23,6 +27,7 @@ import com.fedor.pavel.tattoocommunity.R;
 import com.fedor.pavel.tattoocommunity.comstants.ParseSDKConstants;
 import com.fedor.pavel.tattoocommunity.data.FileManager;
 import com.fedor.pavel.tattoocommunity.dialogs.DialogManager;
+import com.fedor.pavel.tattoocommunity.fragments.AllPhotosFragment;
 import com.fedor.pavel.tattoocommunity.fragments.ProfileFragment;
 import com.fedor.pavel.tattoocommunity.models.LikeModel;
 import com.fedor.pavel.tattoocommunity.models.PostModel;
@@ -31,13 +36,18 @@ import com.fedor.pavel.tattoocommunity.views.ProportionalImageView;
 import com.nostra13.universalimageloader.core.DisplayImageOptions;
 import com.nostra13.universalimageloader.core.ImageLoader;
 import com.nostra13.universalimageloader.core.assist.ImageScaleType;
+import com.parse.GetCallback;
 import com.parse.ParseException;
+import com.parse.ParseObject;
+import com.parse.ParseQuery;
 import com.parse.SaveCallback;
 
 import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.util.List;
+
+import de.hdodenhof.circleimageview.CircleImageView;
 
 
 public class PostRecyclerViewAdapter extends LoadDataRecyclerViewAdapter<PostModel, RecyclerView.ViewHolder> {
@@ -53,37 +63,41 @@ public class PostRecyclerViewAdapter extends LoadDataRecyclerViewAdapter<PostMod
 
     private ProfileFragment fragment;
 
+    private AllPhotosFragment allPhotosFragment;
+
+    private UserModel user;
+
     private static final String LOG_TAG = "PostRVAdapter";
 
-    public PostRecyclerViewAdapter(Context context, List<PostModel> posts) {
-
-        this.inflater = LayoutInflater.from(context);
-
-        items.addAll(posts);
-
-        postType = context.getResources().getStringArray(R.array.postType);
-
-        tattooCategories = context.getResources().getStringArray(R.array.tattooCategories);
-
-        addFooter(R.layout.item_rv_footer_progress_bar);
-
-        this.context = context;
-
-    }
-
-    public PostRecyclerViewAdapter(Context context) {
-
-        this.inflater = LayoutInflater.from(context);
-
-        postType = context.getResources().getStringArray(R.array.postType);
-
-        tattooCategories = context.getResources().getStringArray(R.array.tattooCategories);
-
-        addFooter(R.layout.item_rv_footer_progress_bar);
-
-        this.context = context;
-
-    }
+//    public PostRecyclerViewAdapter(Context context, List<PostModel> posts) {
+//
+//        this.inflater = LayoutInflater.from(context);
+//
+//        items.addAll(posts);
+//
+//        postType = context.getResources().getStringArray(R.array.postType);
+//
+//        tattooCategories = context.getResources().getStringArray(R.array.tattooCategories);
+//
+//        addFooter(R.layout.item_rv_footer_progress_bar);
+//
+//        this.context = context;
+//
+//    }
+//
+//    public PostRecyclerViewAdapter(Context context) {
+//
+//        this.inflater = LayoutInflater.from(context);
+//
+//        postType = context.getResources().getStringArray(R.array.postType);
+//
+//        tattooCategories = context.getResources().getStringArray(R.array.tattooCategories);
+//
+//        addFooter(R.layout.item_rv_footer_progress_bar);
+//
+//        this.context = context;
+//
+//    }
 
     public PostRecyclerViewAdapter(ProfileFragment fragment) {
 
@@ -101,10 +115,26 @@ public class PostRecyclerViewAdapter extends LoadDataRecyclerViewAdapter<PostMod
 
     }
 
+    public PostRecyclerViewAdapter(AllPhotosFragment allPhotosFragment) {
+
+        this.inflater = LayoutInflater.from(allPhotosFragment.getContext());
+
+        postType = allPhotosFragment.getResources().getStringArray(R.array.postType);
+
+        tattooCategories = allPhotosFragment.getResources().getStringArray(R.array.tattooCategories);
+
+        addFooter(R.layout.item_rv_footer_progress_bar);
+
+        this.context = allPhotosFragment.getContext();
+
+        this.allPhotosFragment = allPhotosFragment;
+
+    }
+
     @Override
     public RecyclerView.ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
 
-        Log.d(LOG_TAG, "onCreateViewHolder");
+
 
         RecyclerView.ViewHolder holder = null;
 
@@ -112,7 +142,11 @@ public class PostRecyclerViewAdapter extends LoadDataRecyclerViewAdapter<PostMod
 
             case ViewTyp.VIEW_TYPE_ITEM:
 
-                holder = new LinearLayoutItemsViewHolder(inflater.inflate(R.layout.item_recycler_view_posts_list, parent, false));
+                if(parent.getId()==R.id.rv_photos){
+                    holder = new LinearLayoutItemsViewHolder(inflater.inflate(R.layout.item_rv_posts_list_all, parent, false));
+                }else if(parent.getId()==R.id.fragment_profile_rv_posts){
+                    holder = new LinearLayoutItemsViewHolder(inflater.inflate(R.layout.item_recycler_view_posts_list, parent, false));
+                }
 
                 break;
 
@@ -121,18 +155,20 @@ public class PostRecyclerViewAdapter extends LoadDataRecyclerViewAdapter<PostMod
                 holder = new FooterViewHolder(inflater.inflate(footers.get(0), parent, false));
 
                 break;
+            case ViewTyp.VIEW_TYPE_GRID:
+
+                holder = new GridLayoutItemsViewHolder(inflater.inflate(R.layout.item_post, parent, false));
+
+                break;
+
 
         }
-
 
         return holder;
     }
 
     @Override
     public void onBindViewHolder(RecyclerView.ViewHolder holder, int position) {
-
-        Log.d(LOG_TAG, "onBindViewHolder");
-
 
         if (holder instanceof LinearLayoutItemsViewHolder) {
 
@@ -141,6 +177,10 @@ public class PostRecyclerViewAdapter extends LoadDataRecyclerViewAdapter<PostMod
         } else if (holder instanceof FooterViewHolder) {
 
             bindFooterViewHolder((FooterViewHolder) holder);
+
+        } else if (holder instanceof GridLayoutItemsViewHolder) {
+
+            bindGridLayoutItemsViewHolder((GridLayoutItemsViewHolder) holder, position);
         }
 
 
@@ -160,7 +200,43 @@ public class PostRecyclerViewAdapter extends LoadDataRecyclerViewAdapter<PostMod
 
         holder.chbLike.setChecked(postModel.getLike().isLike());
 
-        holder.chbLike.setText(postModel.getNumOfLikes() + "");
+        if(holder.tvName!=null){
+
+            user = new UserModel();
+
+            ParseQuery<ParseObject> query = ParseQuery.getQuery("_User");
+            query.whereEqualTo("objectId", postModel.getUserId());
+            try {
+                user = (UserModel)query.getFirst();
+                holder.tvName.setText(user.getFullName());
+                ImageLoader.getInstance().displayImage(user.getPhotoUrl(), holder.imgAvatar, setLoaderOptions());
+            } catch (ParseException e) {
+                e.printStackTrace();
+            }
+
+            Log.d(LOG_TAG, user.getFullName());
+
+
+        }
+
+
+    }
+
+    public void bindGridLayoutItemsViewHolder(GridLayoutItemsViewHolder holder, int position) {
+
+        WindowManager wm = (WindowManager) context.getSystemService(Context.WINDOW_SERVICE);
+        Display display = wm.getDefaultDisplay();
+        Point size = new Point();
+        display.getSize(size);
+        int width = size.x;
+
+        holder.imvPhoto.getLayoutParams().height = width/3 - 5;
+        holder.imvPhoto.getLayoutParams().width = width/3 - 5;
+
+        PostModel postModel = items.get(position);
+
+
+        ImageLoader.getInstance().displayImage(postModel.getPhotoUrl(), holder.imvPhoto, setLoaderOptions());
 
     }
 
@@ -190,7 +266,9 @@ public class PostRecyclerViewAdapter extends LoadDataRecyclerViewAdapter<PostMod
 
         CheckBox chbLike;
 
-        TextView tvTitle, tvCategory, tvType;
+        TextView tvTitle, tvCategory, tvType, tvName;
+
+        CircleImageView imgAvatar;
 
         public LinearLayoutItemsViewHolder(View itemView) {
 
@@ -200,18 +278,26 @@ public class PostRecyclerViewAdapter extends LoadDataRecyclerViewAdapter<PostMod
 
             prepareViews();
 
-
         }
 
         private void findViews() {
 
+            try {
+                tvName = (TextView) itemView.findViewById(R.id.item_rv_posts_imv_all_name);
+                imgAvatar = (CircleImageView) itemView.findViewById(R.id.item_rv_posts_imv_all_avatar);
+            }catch (NullPointerException e){
+
+            }
+
+            try {
+                ibRemove = (ImageButton) itemView.findViewById(R.id.item_rv_posts_ib_remove);
+                ibEdit = (ImageButton) itemView.findViewById(R.id.item_rv_posts_ib_edit);
+                ibShare = (ImageButton) itemView.findViewById(R.id.item_rv_posts_ib_share);
+            }catch (NullPointerException e){
+
+            }
+
             imvPhoto = (ProportionalImageView) itemView.findViewById(R.id.item_rv_posts_imv_photo);
-
-            ibRemove = (ImageButton) itemView.findViewById(R.id.item_rv_posts_ib_remove);
-
-            ibEdit = (ImageButton) itemView.findViewById(R.id.item_rv_posts_ib_edit);
-
-            ibShare = (ImageButton) itemView.findViewById(R.id.item_rv_posts_ib_share);
 
             chbLike = (CheckBox) itemView.findViewById(R.id.item_rv_posts_chb_like);
 
@@ -225,11 +311,14 @@ public class PostRecyclerViewAdapter extends LoadDataRecyclerViewAdapter<PostMod
 
         private void prepareViews() {
 
-            ibRemove.setOnClickListener(this);
-
-            ibShare.setOnClickListener(this);
-
-            ibEdit.setOnClickListener(this);
+            if(ibRemove!=null){
+                ibRemove.setOnClickListener(this);
+                ibEdit.setOnClickListener(this);
+                ibShare.setOnClickListener(this);
+            }else if(tvName!=null){
+                tvName.setOnClickListener(this);
+                imgAvatar.setOnClickListener(this);
+            }
 
             chbLike.setOnClickListener(this);
 
@@ -318,7 +407,6 @@ public class PostRecyclerViewAdapter extends LoadDataRecyclerViewAdapter<PostMod
             postModel.saveInBackground();
 
             chbLike.setText(postModel.getNumOfLikes() + "");
-
 
             LikeModel model = postModel.getLike();
 
@@ -434,6 +522,32 @@ public class PostRecyclerViewAdapter extends LoadDataRecyclerViewAdapter<PostMod
 
     }
 
+
+    public class GridLayoutItemsViewHolder extends RecyclerView.ViewHolder{
+
+        ImageView imvPhoto;
+
+
+        public GridLayoutItemsViewHolder(View itemView) {
+
+            super(itemView);
+
+            findViews();
+
+
+        }
+
+        private void findViews() {
+
+            imvPhoto = (ImageView) itemView.findViewById(R.id.img_photo_post);
+
+        }
+
+
+
+    }
+
+
     public class FooterViewHolder extends RecyclerView.ViewHolder {
 
         FrameLayout flProgressContainer;
@@ -444,6 +558,18 @@ public class PostRecyclerViewAdapter extends LoadDataRecyclerViewAdapter<PostMod
 
             flProgressContainer = (FrameLayout) itemView.findViewById(R.id.progress_bar_container);
         }
+    }
+
+    public DisplayImageOptions setLoaderOptions(){
+        DisplayImageOptions options = new DisplayImageOptions.Builder().showImageOnLoading(R.drawable.default_photo)
+                .showImageForEmptyUri(R.drawable.default_photo)
+                .showImageOnFail(R.drawable.default_photo)
+                .bitmapConfig(Bitmap.Config.RGB_565)
+                .cacheInMemory(true)
+                .cacheOnDisk(true)
+                .imageScaleType(ImageScaleType.EXACTLY)
+                .build();
+        return options;
     }
 
 }
