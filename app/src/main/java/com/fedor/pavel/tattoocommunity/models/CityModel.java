@@ -13,7 +13,7 @@ public class CityModel extends ParseObject {
 
     public static final String NAME_PARSE_KEY = "name";
 
-    public static final String COORDINATES_PARSE_KEY  = "coordinates";
+    public static final String COORDINATES_PARSE_KEY = "coordinates";
 
     public CityModel() {
 
@@ -48,7 +48,7 @@ public class CityModel extends ParseObject {
 
     }
 
-    public void setCoordinates(double lat, double lng){
+    public void setCoordinates(double lat, double lng) {
 
         put(COORDINATES_PARSE_KEY, new ParseGeoPoint(lat, lng));
 
@@ -60,4 +60,25 @@ public class CityModel extends ParseObject {
 
     }
 
+    @Override
+    public String toString() {
+
+        return getName();
+
+    }
+
+    @Override
+    public boolean equals(Object city) {
+
+        if (city instanceof CityModel) {
+
+            CityModel cityObject = (CityModel) city;
+
+            return (getName().equals(cityObject.getName()) && getCountryId().equals(cityObject.getCountryId()))
+                    || (getObjectId().equals(cityObject.getObjectId()));
+
+        }
+
+        return false;
+    }
 }

@@ -121,6 +121,7 @@ public class LoadPostsTask extends AsyncTask<Integer, Void, ArrayList<PostModel>
 
         query.whereContainedIn(LikeModel.POST_ID_PARSE_KEY, postsId);
 
+
         if (!isHaveInternet()) {
 
             query.fromLocalDatastore();

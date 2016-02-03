@@ -12,10 +12,14 @@ public  abstract class ParseSDKConstants {
 
     public static final String PARSE_LABEL_RECEIVE_MODEL = "receiveModel";
 
+    public static final String PARSE_LABEL_CITIES_MODEL = "Cities";
+
+    public static final String PARSE_LABEL_COUNTRIES_MODEL = "Countries";
 
     /*Intent keys*/
 
-    public static final String PARSE_MODEL_POSITION_INTENT_KEY= "modelPossition";
+    public static final String PARSE_MODEL_POSITION_INTENT_KEY= "modelPosition";
+
 
 
 

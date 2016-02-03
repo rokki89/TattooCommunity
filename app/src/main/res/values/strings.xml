@@ -6,11 +6,12 @@
 
     <string name="parseApplicationId">UHxp2Bcggv1dZWQCby9pywv23J77EJGlAnouvOo7</string>
     <string name="parseClientKey">KYGpNxtu57K6xRo6mci3YPFalci50xaASxohLGvy</string>
+    <string name="googleMapApiKey">AIzaSyBcvuGLrie8odtwfuHXeeq1_6DE-iLzFyw</string>
 
     <string name="navigation_drawer_open">Open navigation drawer</string>
     <string name="navigation_drawer_close">Close navigation drawer</string>
 
-    <string name="action_settings">Настройка профиля</string>
+    <string name="action_settings">Настройка</string>
     <string name="action_create">Создать пост</string>
     <string name="item_nav_myWorks">Мое портфолио</string>
     <string name="item_nav_masters">Найти мастера</string>
@@ -20,6 +21,17 @@
     <string name="item_nav_favorite">Избранное</string>
     <string name="savingDataProgressMessage">Сохранение данных</string>
     <string name="loadDataProgressMessage">Загрузка данных</string>
+    <string name="activity_profile_settings_edtFullName_hint">Полное имя</string>
+    <string name="activity_profile_settings_edtEmail">Email</string>
+    <string name="activity_profile_settings_edtPhone">Телефон</string>
+    <string name="activity_profile_tv_country">Страна:</string>
+    <string name="activity_profile_tv_city">Город</string>
+    <string name="fragment_address_for_map_edtAddressHint">Адрес</string>
+    <string name="activity_profile_imv_place">Указать место работы</string>
+    <string name="profile_settings_activity_label">Настройка</string>
+    <string name="activitySettingsLoadDataProgress">Загрузка данных</string>
+    <string name="activitySettingsPhoneValidationError">Введите номер телефона</string>
+    <string name="activitySettingsNameValidationError">Введите имя</string>
 
     <string-array name="postType">
 
@@ -54,5 +66,7 @@
         <item>Удалить</item>
 
     </string-array>
+    <string name="title_activity_maps">Map</string>
+    <string name="fragment_address_for_map_edtTitleHint">Название</string>
 
 </resources>

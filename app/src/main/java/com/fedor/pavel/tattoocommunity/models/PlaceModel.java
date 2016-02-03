@@ -1,13 +1,14 @@
 package com.fedor.pavel.tattoocommunity.models;
 
 
+import android.os.Bundle;
+
 import com.parse.ParseClassName;
 import com.parse.ParseGeoPoint;
 import com.parse.ParseObject;
 
 @ParseClassName("Place")
 public class PlaceModel extends ParseObject {
-
 
     public static final String USER_ID_PARSE_KEY = "user_id";
 
@@ -84,6 +85,12 @@ public class PlaceModel extends ParseObject {
 
     }
 
+    public String getCountryId(){
+
+        return getString(COUNTRY_ID_PARSE_KEY);
+
+    }
+
     public void setUserId(String userId) {
 
         put(USER_ID_PARSE_KEY, userId);
@@ -93,6 +100,12 @@ public class PlaceModel extends ParseObject {
     public void setCityId(String cityId) {
 
         put(CITY_ID_PARSE_KEY, cityId);
+
+    }
+
+    public void setCountryId(String countryId){
+
+        put(COUNTRY_ID_PARSE_KEY,countryId);
 
     }
 
@@ -113,5 +126,7 @@ public class PlaceModel extends ParseObject {
         put(COORDINATES_PARSE_KEY, new ParseGeoPoint(lat, lng));
 
     }
+
+
 
 }

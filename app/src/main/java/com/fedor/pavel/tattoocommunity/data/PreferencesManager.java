@@ -10,8 +10,8 @@ import org.json.JSONObject;
 
 public class PreferencesManager {
 
-
     private static PreferencesManager instance;
+
     private static Context context;
 
     public static final String APP_SETTINGS_PREFERENCES_NAME = "App settings";
@@ -64,6 +64,5 @@ public class PreferencesManager {
         return new JSONObject(sharedPreferences.getString(key,""));
 
     }
-
 
 }

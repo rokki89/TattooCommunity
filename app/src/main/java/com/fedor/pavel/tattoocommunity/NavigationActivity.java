@@ -172,6 +172,8 @@ public class NavigationActivity extends AppCompatActivity
 
                 if (getSupportFragmentManager().findFragmentById(R.id.activity_navigation_fragment_container) instanceof ProfileFragment) {
 
+
+
                     break;
 
                 }

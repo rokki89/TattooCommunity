@@ -5,6 +5,7 @@ import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.graphics.Bitmap;
+import android.graphics.drawable.BitmapDrawable;
 import android.net.Uri;
 import android.os.AsyncTask;
 import android.support.v7.widget.RecyclerView;
@@ -13,7 +14,6 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.CheckBox;
-import android.widget.CompoundButton;
 import android.widget.FrameLayout;
 import android.widget.ImageButton;
 import android.widget.TextView;
@@ -54,6 +54,8 @@ public class PostRecyclerViewAdapter extends LoadDataRecyclerViewAdapter<PostMod
     private ProfileFragment fragment;
 
     private static final String LOG_TAG = "PostRVAdapter";
+
+    private File sharingFile;
 
     public PostRecyclerViewAdapter(Context context, List<PostModel> posts) {
 
@@ -101,6 +103,16 @@ public class PostRecyclerViewAdapter extends LoadDataRecyclerViewAdapter<PostMod
 
     }
 
+    public void deleteSharingFile() {
+
+        if (sharingFile != null) {
+
+            sharingFile.delete();
+
+        }
+
+    }
+
     @Override
     public RecyclerView.ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
 
@@ -110,13 +122,13 @@ public class PostRecyclerViewAdapter extends LoadDataRecyclerViewAdapter<PostMod
 
         switch (viewType) {
 
-            case ViewTyp.VIEW_TYPE_ITEM:
+            case ViewType.VIEW_TYPE_ITEM:
 
                 holder = new LinearLayoutItemsViewHolder(inflater.inflate(R.layout.item_recycler_view_posts_list, parent, false));
 
                 break;
 
-            case ViewTyp.VIEW_TYPE_FOOTER:
+            case ViewType.VIEW_TYPE_FOOTER:
 
                 holder = new FooterViewHolder(inflater.inflate(footers.get(0), parent, false));
 
@@ -131,9 +143,6 @@ public class PostRecyclerViewAdapter extends LoadDataRecyclerViewAdapter<PostMod
     @Override
     public void onBindViewHolder(RecyclerView.ViewHolder holder, int position) {
 
-        Log.d(LOG_TAG, "onBindViewHolder");
-
-
         if (holder instanceof LinearLayoutItemsViewHolder) {
 
             bindLinearLayoutItemsViewHolder((LinearLayoutItemsViewHolder) holder, position);
@@ -142,7 +151,6 @@ public class PostRecyclerViewAdapter extends LoadDataRecyclerViewAdapter<PostMod
 
             bindFooterViewHolder((FooterViewHolder) holder);
         }
-
 
     }
 
@@ -172,17 +180,17 @@ public class PostRecyclerViewAdapter extends LoadDataRecyclerViewAdapter<PostMod
 
             holder.flProgressContainer.setVisibility(View.GONE);
 
-
         } else {
 
             holder.flProgressContainer.setVisibility(View.VISIBLE);
 
             holder.flProgressContainer.setScaleY(1f);
+
         }
 
     }
 
-    public class LinearLayoutItemsViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener, CompoundButton.OnCheckedChangeListener {
+    public class LinearLayoutItemsViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
 
         ProportionalImageView imvPhoto;
 
@@ -232,7 +240,6 @@ public class PostRecyclerViewAdapter extends LoadDataRecyclerViewAdapter<PostMod
             ibEdit.setOnClickListener(this);
 
             chbLike.setOnClickListener(this);
-
 
         }
 
@@ -286,7 +293,7 @@ public class PostRecyclerViewAdapter extends LoadDataRecyclerViewAdapter<PostMod
 
                                 intent.putExtra(ParseSDKConstants.PARSE_KEY_OBJECT_ID, items.get(getAdapterPosition()).getObjectId());
 
-                                intent.putExtra(ParseSDKConstants.PARSE_MODEL_POSITION_INTENT_KEY,getAdapterPosition());
+                                intent.putExtra(ParseSDKConstants.PARSE_MODEL_POSITION_INTENT_KEY, getAdapterPosition());
 
                                 fragment.startActivityForResult(intent, ProfileFragment.REQUEST_CREATE_POST);
 
@@ -299,12 +306,6 @@ public class PostRecyclerViewAdapter extends LoadDataRecyclerViewAdapter<PostMod
 
 
             }
-
-
-        }
-
-        @Override
-        public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
 
 
         }
@@ -339,11 +340,16 @@ public class PostRecyclerViewAdapter extends LoadDataRecyclerViewAdapter<PostMod
             AsyncTask<Void, Void, Uri> task = new AsyncTask<Void, Void, Uri>() {
 
                 private PostModel post = items.get(getAdapterPosition());
+                private Bitmap bm;
 
                 @Override
                 protected void onPreExecute() {
 
                     fragment.showProgressDialog();
+
+                    bm = ((BitmapDrawable) imvPhoto.getDrawable()).getBitmap();
+
+
                     super.onPreExecute();
                 }
 
@@ -353,17 +359,20 @@ public class PostRecyclerViewAdapter extends LoadDataRecyclerViewAdapter<PostMod
 
                     FileOutputStream outputStream = null;
 
-                    File file = null;
-
 
                     try {
 
+                        deleteSharingFile();
 
-                        file = FileManager.createFile(context);
+                        sharingFile = FileManager.createFile(context);
 
-                        outputStream = new FileOutputStream(file);
+                        outputStream = new FileOutputStream(sharingFile);
 
-                        Bitmap bm = ImageLoader.getInstance().loadImageSync(post.getPhotoUrl(), loadImageOptions());
+                        if (bm == null) {
+
+                            bm = ImageLoader.getInstance().loadImageSync(post.getPhotoUrl(), loadImageOptions());
+
+                        }
 
                         bm.compress(Bitmap.CompressFormat.JPEG, 100, outputStream);
 
@@ -387,7 +396,7 @@ public class PostRecyclerViewAdapter extends LoadDataRecyclerViewAdapter<PostMod
 
                     }
 
-                    return Uri.fromFile(file);
+                    return Uri.fromFile(sharingFile);
 
                 }
 
@@ -400,14 +409,17 @@ public class PostRecyclerViewAdapter extends LoadDataRecyclerViewAdapter<PostMod
                     if (uri != null) {
 
                         Intent shareIntent = new Intent();
+
                         shareIntent.setAction(Intent.ACTION_SEND);
+
                         shareIntent.putExtra(Intent.EXTRA_STREAM, uri);
+
                         shareIntent.putExtra(Intent.EXTRA_TEXT,
-                                "#" + ((UserModel) UserModel.getCurrentUser()).getFullName()
-                                        + " #" + fragment.getCountry().getName() + " #" + fragment.getCity().getName() +
-                                        (post.getTitle().isEmpty() ? "" : "#" + post.getTitle().replace("_", ""))
-                                        + " #" + postType[post.getType()]
-                                        + " #" + tattooCategories[post.getCategoryId()]);
+                                "#" + ((UserModel) UserModel.getCurrentUser()).getFullName().replace("#", "").replace(" ", "")
+                                 + " #" + fragment.getCountry() + " #" + fragment.getCity() +
+                                 (post.getTitle().isEmpty() ? "" : "#" + post.getTitle().replace(" ", "").replace("#", ""))
+                                 + " #" + postType[post.getType()]
+                                 + " #" + tattooCategories[post.getCategoryId()]);
 
                         shareIntent.setType("image/*");
 
@@ -445,5 +457,6 @@ public class PostRecyclerViewAdapter extends LoadDataRecyclerViewAdapter<PostMod
             flProgressContainer = (FrameLayout) itemView.findViewById(R.id.progress_bar_container);
         }
     }
+
 
 }

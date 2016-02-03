@@ -27,6 +27,7 @@ import android.widget.TextView;
 
 
 import com.fedor.pavel.tattoocommunity.CreatePostActivity;
+import com.fedor.pavel.tattoocommunity.ProfileSettingsActivity;
 import com.fedor.pavel.tattoocommunity.R;
 import com.fedor.pavel.tattoocommunity.adapters.PostRecyclerViewAdapter;
 import com.fedor.pavel.tattoocommunity.comstants.ParseSDKConstants;
@@ -34,8 +35,7 @@ import com.fedor.pavel.tattoocommunity.data.FileManager;
 import com.fedor.pavel.tattoocommunity.dialogs.DialogManager;
 import com.fedor.pavel.tattoocommunity.listeners.OnLoadNexDataPartListener;
 import com.fedor.pavel.tattoocommunity.listeners.OnPostLoadListener;
-import com.fedor.pavel.tattoocommunity.models.CityModel;
-import com.fedor.pavel.tattoocommunity.models.CountryModel;
+import com.fedor.pavel.tattoocommunity.models.PlaceModel;
 import com.fedor.pavel.tattoocommunity.models.PostModel;
 import com.fedor.pavel.tattoocommunity.models.UserModel;
 import com.fedor.pavel.tattoocommunity.task.LoadPostsTask;
@@ -45,7 +45,6 @@ import com.nostra13.universalimageloader.core.ImageLoader;
 import com.nostra13.universalimageloader.core.assist.ImageScaleType;
 import com.parse.CountCallback;
 import com.parse.ParseException;
-import com.parse.ParseObject;
 import com.parse.ParseQuery;
 import com.parse.SaveCallback;
 
@@ -72,9 +71,9 @@ public class ProfileFragment extends Fragment implements AppBarLayout.OnOffsetCh
 
     private UserModel user;
 
-    private CountryModel country;
+    private String country;
 
-    private CityModel city;
+    private String city;
 
     private Uri photoUri;
 
@@ -98,9 +97,13 @@ public class ProfileFragment extends Fragment implements AppBarLayout.OnOffsetCh
 
     public static final int REQUEST_FROM_GALLERY_WALL = 4;
 
+    public static final int REQUEST_PROFILE_CONFIG = 5;
+
     public static final int RESULT_CODE_POST_CREATED = 200;
 
     public static final int RESULT_CODE_POST_EDIT = -200;
+
+    public static final int RESULT_PROFILE_EDIT_OK = -5;
 
 
     @Nullable
@@ -110,15 +113,21 @@ public class ProfileFragment extends Fragment implements AppBarLayout.OnOffsetCh
 
         user = (UserModel) UserModel.getCurrentUser();
 
-        try {
+        if (user != null) {
+            try {
 
-            user.getPlace().fetchIfNeeded();
+                PlaceModel place = user.getPlace();
 
-        } catch (ParseException e) {
-            e.printStackTrace();
+                if (place!=null) {
+
+                    place.fetchIfNeeded();
+
+                }
+
+            } catch (ParseException e) {
+                e.printStackTrace();
+            }
         }
-
-        Log.d(LOG_TAG, user.getPlace().getCityId());
 
         postsAdapter = new PostRecyclerViewAdapter(this);
 
@@ -175,11 +184,7 @@ public class ProfileFragment extends Fragment implements AppBarLayout.OnOffsetCh
 
     private void prepareViews() {
 
-        tvName.setText(user.getFullName());
-
-        tvTitle.setText(user.getFullName());
-
-        tvPhone.setText(user.getPhone());
+        filDataFromCurrentUser();
 
         tvTitle.setVisibility(View.GONE);
 
@@ -191,8 +196,6 @@ public class ProfileFragment extends Fragment implements AppBarLayout.OnOffsetCh
 
         postsAdapter.loadDataWithPagination(rvPosts, this);
 
-        prepareTvPlace();
-
         imvPhoto.setOnClickListener(this);
 
         ibSetWall.setOnClickListener(this);
@@ -203,20 +206,30 @@ public class ProfileFragment extends Fragment implements AppBarLayout.OnOffsetCh
 
     }
 
-    private void prepareTvPlace() {
+    private void filDataFromCurrentUser() {
+
+        tvName.setText(user.getFullName());
+
+        tvTitle.setText(user.getFullName());
+
+        tvPhone.setText(user.getPhone());
 
         String placeName = "-";
 
-        city = getLocationPlace(CityModel.class, user.getPlace().getCityId());
+        PlaceModel placeModel = user.getPlace();
 
-        if (city != null) {
+        if (placeModel != null) {
+            city = placeModel.getCityId();
 
-            country = getLocationPlace(CountryModel.class, city.getCountryId());
+            if (city != null) {
 
-            if (country != null) {
+                country = placeModel.getCountryId();
 
-                placeName = country.getName() + ", " + city.getName();
+                if (country != null) {
 
+                    placeName = country + ", " + city;
+
+                }
             }
 
         }
@@ -234,35 +247,15 @@ public class ProfileFragment extends Fragment implements AppBarLayout.OnOffsetCh
 
     }
 
-    public CityModel getCity() {
+    public String getCity() {
 
         return city;
 
     }
 
-    public CountryModel getCountry() {
+    public String getCountry() {
 
         return country;
-
-    }
-
-    private <T extends ParseObject> T getLocationPlace(Class<T> subclass, String id) {
-
-        ParseQuery<T> query = ParseQuery.getQuery(subclass);
-
-        query.fromLocalDatastore();
-
-        try {
-
-            return query.get(id);
-
-        } catch (ParseException e) {
-
-            Log.d(LOG_TAG, "" + e);
-
-            return null;
-        }
-
 
     }
 
@@ -345,6 +338,10 @@ public class ProfileFragment extends Fragment implements AppBarLayout.OnOffsetCh
             case R.id.fragment_profile_action_settings:
 
 
+                Intent intent = new Intent(getContext(), ProfileSettingsActivity.class);
+
+                startActivityForResult(intent, REQUEST_PROFILE_CONFIG);
+
                 break;
 
             case R.id.fragment_profile_imv_photo:
@@ -370,6 +367,7 @@ public class ProfileFragment extends Fragment implements AppBarLayout.OnOffsetCh
 
                 break;
 
+
         }
 
 
@@ -378,6 +376,13 @@ public class ProfileFragment extends Fragment implements AppBarLayout.OnOffsetCh
     @Override
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
+
+        if (requestCode == REQUEST_PROFILE_CONFIG && resultCode == RESULT_PROFILE_EDIT_OK) {
+
+
+            filDataFromCurrentUser();
+
+        }
 
         if (requestCode == REQUEST_CREATE_POST && resultCode == RESULT_CODE_POST_CREATED) {
 
@@ -465,7 +470,15 @@ public class ProfileFragment extends Fragment implements AppBarLayout.OnOffsetCh
     @Override
     public void onClick(DialogInterface dialog, int which) {
 
+        int[][] i = new int[10][10];
+
+        int i1 = i[0].length;
+
+        int i2 = i.length;
+
+
         switch (which) {
+
 
             case 0:
 
@@ -582,4 +595,12 @@ public class ProfileFragment extends Fragment implements AppBarLayout.OnOffsetCh
                 .build();
     }
 
+    @Override
+    public void onDestroy() {
+
+        postsAdapter.deleteSharingFile();
+
+        super.onDestroy();
+
+    }
 }

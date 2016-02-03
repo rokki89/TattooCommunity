@@ -31,5 +31,23 @@ public class CountryModel extends ParseObject {
 
     }
 
+    @Override
+    public String toString() {
+        return getName();
+    }
 
+    @Override
+    public boolean equals(Object country) {
+
+        if (country instanceof CountryModel) {
+
+            CountryModel countryModel = (CountryModel) country;
+
+            return getName().equals(countryModel.getName()) || getObjectId().equals(countryModel.getObjectId());
+
+
+        }
+
+        return false;
+    }
 }

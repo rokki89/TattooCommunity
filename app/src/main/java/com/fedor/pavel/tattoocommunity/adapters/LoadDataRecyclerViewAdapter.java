@@ -7,7 +7,6 @@ import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
 
-import com.fedor.pavel.tattoocommunity.fragments.ProfileFragment;
 import com.fedor.pavel.tattoocommunity.listeners.OnLoadNexDataPartListener;
 import com.nostra13.universalimageloader.core.ImageLoader;
 
@@ -151,17 +150,19 @@ public abstract class LoadDataRecyclerViewAdapter<T, VH extends RecyclerView.Vie
 
         if (!headers.isEmpty() && position < headers.size()) {
 
-            return ViewTyp.VIEW_TYPE_HEADER;
+            return ViewType.VIEW_TYPE_HEADER;
 
         } else if (!footers.isEmpty() && position >= headers.size() + items.size()) {
 
-            return ViewTyp.VIEW_TYPE_FOOTER;
+            return ViewType.VIEW_TYPE_FOOTER;
 
         } else {
 
-            return ViewTyp.VIEW_TYPE_ITEM;
+            return ViewType.VIEW_TYPE_ITEM;
 
         }
+
+
 
     }
 
@@ -188,10 +189,10 @@ public abstract class LoadDataRecyclerViewAdapter<T, VH extends RecyclerView.Vie
                 @Override
                 public int getSpanSize(int position) {
                     switch (getItemViewType(position)) {
-                        case ViewTyp.VIEW_TYPE_HEADER:
-                        case ViewTyp.VIEW_TYPE_FOOTER:
-                            return 2;
-                        case ViewTyp.VIEW_TYPE_ITEM:
+                        case ViewType.VIEW_TYPE_HEADER:
+                        case ViewType.VIEW_TYPE_FOOTER:
+                            return 3;
+                        case ViewType.VIEW_TYPE_ITEM:
                             return 1;
 
                     }
@@ -266,15 +267,13 @@ public abstract class LoadDataRecyclerViewAdapter<T, VH extends RecyclerView.Vie
 
     }
 
-    public class ViewTyp {
+    public class ViewType {
 
         public static final int VIEW_TYPE_HEADER = 1;
 
         public static final int VIEW_TYPE_ITEM = 2;
 
         public static final int VIEW_TYPE_FOOTER = 3;
-
-
     }
 
 }

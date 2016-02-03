@@ -6,6 +6,7 @@ import android.net.NetworkInfo;
 import android.os.AsyncTask;
 import android.util.Log;
 
+import com.fedor.pavel.tattoocommunity.comstants.ParseSDKConstants;
 import com.fedor.pavel.tattoocommunity.listeners.OnCountriesLoadListener;
 import com.fedor.pavel.tattoocommunity.models.CityModel;
 import com.fedor.pavel.tattoocommunity.models.CountryModel;
@@ -66,8 +67,8 @@ public class LoadCountriesTask extends AsyncTask<Void, Void, Integer> {
             try {
 
             /*Saving to Parse local data base*/
-                ParseObject.unpinAll("Cities");
-                ParseObject.pinAll("Cities", cityQuery.find());
+                ParseObject.unpinAll(ParseSDKConstants.PARSE_LABEL_CITIES_MODEL);
+                ParseObject.pinAll(ParseSDKConstants.PARSE_LABEL_CITIES_MODEL, cityQuery.find());
 
             } catch (ParseException e) {
 
@@ -83,8 +84,8 @@ public class LoadCountriesTask extends AsyncTask<Void, Void, Integer> {
 
 
             try {
-                ParseObject.unpinAll("Countries");
-                ParseObject.pinAll("Countries", countryQuery.find());
+                ParseObject.unpinAll(ParseSDKConstants.PARSE_LABEL_COUNTRIES_MODEL);
+                ParseObject.pinAll(ParseSDKConstants.PARSE_LABEL_COUNTRIES_MODEL, countryQuery.find());
 
             } catch (ParseException e) {
 

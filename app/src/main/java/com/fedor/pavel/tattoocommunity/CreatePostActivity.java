@@ -345,7 +345,7 @@ public class CreatePostActivity extends AppCompatActivity implements View.OnClic
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
 
-        getMenuInflater().inflate(R.menu.create_post_activity_menu, menu);
+        getMenuInflater().inflate(R.menu.menu, menu);
 
         return super.onCreateOptionsMenu(menu);
     }
@@ -355,7 +355,7 @@ public class CreatePostActivity extends AppCompatActivity implements View.OnClic
 
         switch (item.getItemId()) {
 
-            case R.id.action_create:
+            case R.id.action_apply:
 
                 if (isPhotoSelected) {
 
