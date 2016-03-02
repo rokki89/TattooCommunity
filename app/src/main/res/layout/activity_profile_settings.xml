@@ -93,6 +93,7 @@
                     android:layout_height="wrap_content"
                     android:inputType="phone"
                     android:singleLine="true"
+                    android:hint="Телефон"
                     android:textColor="@color/colorPrimaryDark" />
 
             </android.support.design.widget.TextInputLayout>
@@ -116,7 +117,7 @@
                 android:layout_marginTop="24dp"
                 android:background="@drawable/btn_default_selector"
                 android:text="@string/activity_profile_imv_place"
-                android:textColor="@color/colorPrimaryDark"
+                android:textColor="@color/colorAccent"
                 android:textSize="18sp" />
 
 
@@ -135,7 +136,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_below="@id/activity_profile_tv_place"
-                android:layout_marginTop="12dp"
+                android:layout_marginTop="8dp"
                 android:animateLayoutChanges="true"
                 android:orientation="vertical">
 

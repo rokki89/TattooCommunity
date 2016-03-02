@@ -7,6 +7,7 @@ import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
 
+import com.fedor.pavel.tattoocommunity.R;
 import com.fedor.pavel.tattoocommunity.listeners.OnLoadNexDataPartListener;
 import com.nostra13.universalimageloader.core.ImageLoader;
 
@@ -27,7 +28,7 @@ public abstract class LoadDataRecyclerViewAdapter<T, VH extends RecyclerView.Vie
 
     protected boolean isLoadingData = false;
 
-    protected int dataLimit = 10;
+    protected int dataLimit = 5;
 
     protected int offset = 0;
 
@@ -35,17 +36,17 @@ public abstract class LoadDataRecyclerViewAdapter<T, VH extends RecyclerView.Vie
 
     protected int numOfPages = 1;
 
+    private boolean isItGrid;
 
-    public void addItem(T item) {
+    private int visibleThreshold = 1;
 
-        items.add(item);
+    protected boolean canLoadMore = true;
 
-
-    }
 
     public void addAllItems(List<T> items) {
 
-        int start = this.items.size();
+
+        int start = headers.size() + this.items.size();
 
         this.items.addAll(items);
 
@@ -70,34 +71,44 @@ public abstract class LoadDataRecyclerViewAdapter<T, VH extends RecyclerView.Vie
 
     }
 
+    public void removeFooter(@LayoutRes int viewId) {
+
+        int position = footers.indexOf(viewId);
+
+        if (position > -1) {
+
+            footers.remove(position);
+
+            notifyItemRemoved(getItemCount() - 1);
+
+        }
+
+    }
+
     public void addFooter(@LayoutRes int viewId) {
+
+        if (viewId == R.layout.item_rv_footer_progress_bar) {
+
+            int position = footers.indexOf(R.layout.item_rv_footer_progress_bar);
+
+            if (position < 0) {
+
+                footers.add(viewId);
+
+                notifyItemInserted(getItemCount() - 1);
+
+            }
+
+            return;
+
+        }
 
         footers.add(viewId);
 
     }
 
-    public void addHeader(@LayoutRes int viewId) {
-
-        headers.add(viewId);
-
-    }
-
-    public void clearHeaders() {
-
-        headers.clear();
-
-
-    }
-
-    public void clearFooters() {
-
-        footers.clear();
-
-    }
-
-    public T getItem(int position){
-
-       return items.get(position);
+    public T getItem(int position) {
+        return items.get(position);
 
     }
 
@@ -107,41 +118,18 @@ public abstract class LoadDataRecyclerViewAdapter<T, VH extends RecyclerView.Vie
 
     }
 
-    public void setDataLimit(int dataLimit) {
-
-        this.dataLimit = dataLimit;
-
-    }
-
     public int getDataLimit() {
+
         return dataLimit;
     }
 
-    public int getOffset() {
-        return offset;
-    }
-
-    public void setOffset(int offset) {
-        this.offset = offset;
-    }
-
     public boolean isLoadingData() {
+
         return isLoadingData;
     }
 
-    public int getNumOfPages() {
-        return numOfPages;
-    }
-
-    public void setNumOfPages(int numOfPages) {
-        this.numOfPages = numOfPages;
-    }
-
-    public int getTotalDataNumber() {
-        return totalDataNumber;
-    }
-
     public void setTotalDataNumber(int totalDataNumber) {
+
         this.totalDataNumber = totalDataNumber;
     }
 
@@ -150,19 +138,19 @@ public abstract class LoadDataRecyclerViewAdapter<T, VH extends RecyclerView.Vie
 
         if (!headers.isEmpty() && position < headers.size()) {
 
-            return ViewType.VIEW_TYPE_HEADER;
+            return ViewTyp.VIEW_TYPE_HEADER;
 
         } else if (!footers.isEmpty() && position >= headers.size() + items.size()) {
 
-            return ViewType.VIEW_TYPE_FOOTER;
+            return ViewTyp.VIEW_TYPE_FOOTER;
+
+        } else if (isItGrid) {
+
+            return ViewTyp.VIEW_TYPE_GRID;
 
         } else {
-
-            return ViewType.VIEW_TYPE_ITEM;
-
+            return ViewTyp.VIEW_TYPE_ITEM;
         }
-
-
 
     }
 
@@ -182,19 +170,22 @@ public abstract class LoadDataRecyclerViewAdapter<T, VH extends RecyclerView.Vie
     public void loadDataWithPagination(RecyclerView rvParent, OnLoadNexDataPartListener listener) {
 
         this.listener = listener;
-
+        isItGrid = false;
         if (rvParent.getLayoutManager() instanceof GridLayoutManager) {
+
+            isItGrid = true;
 
             ((GridLayoutManager) rvParent.getLayoutManager()).setSpanSizeLookup(new GridLayoutManager.SpanSizeLookup() {
                 @Override
                 public int getSpanSize(int position) {
                     switch (getItemViewType(position)) {
-                        case ViewType.VIEW_TYPE_HEADER:
-                        case ViewType.VIEW_TYPE_FOOTER:
+                        case ViewTyp.VIEW_TYPE_HEADER:
+                        case ViewTyp.VIEW_TYPE_FOOTER:
                             return 3;
-                        case ViewType.VIEW_TYPE_ITEM:
+                        case ViewTyp.VIEW_TYPE_ITEM:
                             return 1;
-
+                        case ViewTyp.VIEW_TYPE_GRID:
+                            return 1;
                     }
 
                     return 0;
@@ -207,11 +198,15 @@ public abstract class LoadDataRecyclerViewAdapter<T, VH extends RecyclerView.Vie
             @Override
             public void onScrolled(RecyclerView recyclerView, int dx, int dy) {
 
+                Log.d(LOG_TAG,"dy = "+dy);
+
+                if (dy > 0) {
+                    pagination(recyclerView.getLayoutManager());
+                }
+
                 super.onScrolled(recyclerView, dx, dy);
-
-                pagination(recyclerView.getLayoutManager());
-
             }
+
         });
 
 
@@ -221,11 +216,11 @@ public abstract class LoadDataRecyclerViewAdapter<T, VH extends RecyclerView.Vie
 
         if (layoutManager instanceof LinearLayoutManager) {
 
-            return ((LinearLayoutManager) layoutManager).findLastCompletelyVisibleItemPosition();
+            return ((LinearLayoutManager) layoutManager).findLastVisibleItemPosition();
 
         } else if (layoutManager instanceof GridLayoutManager) {
 
-            return ((GridLayoutManager) layoutManager).findLastCompletelyVisibleItemPosition();
+            return ((GridLayoutManager) layoutManager).findLastVisibleItemPosition();
 
         } else {
 
@@ -237,16 +232,23 @@ public abstract class LoadDataRecyclerViewAdapter<T, VH extends RecyclerView.Vie
 
     private void pagination(RecyclerView.LayoutManager manager) {
 
+
         int itemsCount = getItemCount();
 
         int lastVisibleItem = getLastCompleteVisibleItem(manager);
 
-        Log.d(LOG_TAG, "lastVisibleItem = " + lastVisibleItem);
+        canLoadMore = false;
+
 
         if ((!isLoadingData)
-                && (lastVisibleItem == itemsCount - 1)
+                && (lastVisibleItem + visibleThreshold >= itemsCount)
                 && (getOnlyItemCount() < totalDataNumber)
                 ) {
+
+
+            addFooter(R.layout.item_rv_footer_progress_bar);
+
+            canLoadMore = true;
 
             setIsLoadingData(true);
 
@@ -265,15 +267,22 @@ public abstract class LoadDataRecyclerViewAdapter<T, VH extends RecyclerView.Vie
 
         }
 
+        if (!isLoadingData) {
+            removeFooter(R.layout.item_rv_footer_progress_bar);
+        }
+
     }
 
-    public class ViewType {
+    public class ViewTyp {
 
         public static final int VIEW_TYPE_HEADER = 1;
 
         public static final int VIEW_TYPE_ITEM = 2;
 
         public static final int VIEW_TYPE_FOOTER = 3;
+
+        public static final int VIEW_TYPE_GRID = 4;
+
     }
 
 }

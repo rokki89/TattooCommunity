@@ -80,7 +80,7 @@ public class ProportionalImageView extends ImageView {
                 .showImageOnFail(R.drawable.default_photo)
                 .bitmapConfig(Bitmap.Config.RGB_565)
                 .cacheInMemory(true)
-                .cacheOnDisk(true)
+                .cacheOnDisk(false)
                 .imageScaleType(ImageScaleType.EXACTLY)
                 .build();
     }

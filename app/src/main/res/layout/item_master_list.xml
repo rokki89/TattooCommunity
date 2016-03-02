@@ -1,0 +1,71 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/item_master_list_LL"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:orientation="vertical">
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:paddingLeft="8dp"
+        android:paddingRight="8dp"
+        android:paddingTop="8dp">
+
+        <de.hdodenhof.circleimageview.CircleImageView
+            android:id="@+id/item_master_list_ava"
+            android:layout_width="75dp"
+            android:layout_height="75dp"
+            android:gravity="center"
+            android:scaleType="centerCrop"
+            android:src="@drawable/ic_action_master" />
+
+        <TextView
+            android:id="@+id/item_master_list_name"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:layout_toRightOf="@id/item_master_list_ava"
+            android:gravity="center"
+            android:singleLine="true"
+            android:textColor="#000"
+            android:textSize="18sp"
+            tools:text="Name SecondName" />
+
+        <TextView
+            android:id="@+id/item_master_list_city"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_below="@id/item_master_list_name"
+            android:layout_gravity="center"
+            android:layout_marginTop="8dp"
+            android:layout_toRightOf="@id/item_master_list_ava"
+            android:gravity="center"
+            android:singleLine="true"
+            android:textColor="#2e2d2d"
+            android:textSize="14sp"
+            tools:text="Dnipropetrovsk" />
+
+        <TextView
+            android:id="@+id/item_master_list_country"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_below="@id/item_master_list_city"
+            android:layout_gravity="center"
+            android:layout_marginTop="8dp"
+            android:layout_toRightOf="@id/item_master_list_ava"
+            android:gravity="center"
+            android:singleLine="true"
+            android:text="Ukraine"
+            android:textColor="#2e2d2d"
+            android:textSize="14sp" />
+    </RelativeLayout>
+
+    <FrameLayout
+        android:layout_width="match_parent"
+        android:layout_height="1.2dp"
+        android:layout_marginTop="8dp"
+        android:background="#b3837878" />
+
+</LinearLayout>

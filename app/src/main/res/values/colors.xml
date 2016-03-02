@@ -3,4 +3,10 @@
     <color name="colorPrimary">#3F51B5</color>
     <color name="colorPrimaryDark">#303F9F</color>
     <color name="colorAccent">#FF4081</color>
+
+    <color name="checkboxPopupCategories">#FFF</color>
+
+    <drawable name="pressed_color">#6b7ff1</drawable>
+    <drawable name="normal_color">#525258</drawable>
+    <color name="windowBackGround">#dcdee3</color>
 </resources>

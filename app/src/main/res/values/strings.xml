@@ -4,6 +4,11 @@
 
     <string name="create_post_activity_label">Опубликовать фото</string>
 
+    <string name="hint_country">введите страну</string>
+    <string name="hint_city">введите город</string>
+    <string name="hint_master_name">имя мастера</string>
+    <string name="search">поиск</string>
+
     <string name="parseApplicationId">UHxp2Bcggv1dZWQCby9pywv23J77EJGlAnouvOo7</string>
     <string name="parseClientKey">KYGpNxtu57K6xRo6mci3YPFalci50xaASxohLGvy</string>
     <string name="googleMapApiKey">AIzaSyBcvuGLrie8odtwfuHXeeq1_6DE-iLzFyw</string>
@@ -18,7 +23,7 @@
     <string name="item_nav_sketches">Найти работы</string>
     <string name="item_nav_news">Новости</string>
     <string name="item_nav_map">Карта</string>
-    <string name="item_nav_favorite">Избранное</string>
+    <string name="item_nav_favorite">Подписки</string>
     <string name="savingDataProgressMessage">Сохранение данных</string>
     <string name="loadDataProgressMessage">Загрузка данных</string>
     <string name="activity_profile_settings_edtFullName_hint">Полное имя</string>
@@ -33,6 +38,11 @@
     <string name="activitySettingsPhoneValidationError">Введите номер телефона</string>
     <string name="activitySettingsNameValidationError">Введите имя</string>
 
+    <string name="choice_category">Выберите категории поиска</string>
+    <string name="master_list">Список мастеров</string>
+    <string name="last_photos">Последние работы</string>
+    <string name="rating">Рейтинг</string>
+    <string name="categories">Категории: </string>
     <string-array name="postType">
 
         <item>Татуировка</item>
@@ -56,7 +66,6 @@
         <item>Япония</item>
         <item>Другое</item>
 
-
     </string-array>
 
     <string-array name="photoPikerDialog">
@@ -68,5 +77,19 @@
     </string-array>
     <string name="title_activity_maps">Map</string>
     <string name="fragment_address_for_map_edtTitleHint">Название</string>
+
+
+    <string-array name="countries">
+
+        <item>Украина</item>
+        <item>Россия</item>
+        <item>Белоруссия</item>
+        <item>ukraine</item>
+
+    </string-array>
+
+
+    <string name="hello_blank_fragment">Hello blank fragment</string>
+    <string name="all_works">все работы</string>
 
 </resources>

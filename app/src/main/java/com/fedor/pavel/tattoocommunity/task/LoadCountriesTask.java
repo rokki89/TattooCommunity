@@ -45,19 +45,8 @@ public class LoadCountriesTask extends AsyncTask<Void, Void, Integer> {
     @Override
     protected Integer doInBackground(Void... params) {
 
-        // TODO: 21.01.2016 Не забыть убрать авторизацию
 
-        if (UserModel.getCurrentUser() == null) {
 
-            UserModel.logOut();
-
-            try {
-                UserModel.logIn("pavelbjorn@gmai.com", "1234");
-            } catch (ParseException e) {
-
-                return e.getCode();
-            }
-        }
 
         /*Hear getting cities */
 

@@ -1,6 +1,6 @@
 package com.fedor.pavel.tattoocommunity;
-
 import android.app.Application;
+
 
 import com.fedor.pavel.tattoocommunity.models.CityModel;
 import com.fedor.pavel.tattoocommunity.models.CommentsModel;
@@ -16,7 +16,7 @@ import com.parse.ParseObject;
 import com.parse.ParseUser;
 
 
-public class App extends Application {
+public class App extends Application  {
 
 
     @Override
@@ -59,6 +59,7 @@ public class App extends Application {
         ImageLoader.getInstance().init(config);
 
     }
+
 
 
 }

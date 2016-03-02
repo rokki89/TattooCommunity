@@ -2,6 +2,7 @@ package com.fedor.pavel.tattoocommunity;
 
 import android.animation.ObjectAnimator;
 import android.app.ProgressDialog;
+import android.content.ComponentName;
 import android.content.Intent;
 import android.graphics.Bitmap;
 import android.net.Uri;
@@ -21,6 +22,8 @@ import android.widget.EditText;
 import android.widget.FrameLayout;
 import android.widget.ImageButton;
 
+
+
 import com.fedor.pavel.tattoocommunity.comstants.ParseSDKConstants;
 import com.fedor.pavel.tattoocommunity.data.FileManager;
 import com.fedor.pavel.tattoocommunity.fragments.ProfileFragment;
@@ -37,6 +40,7 @@ import com.parse.SaveCallback;
 
 import java.io.File;
 import java.io.IOException;
+
 
 public class CreatePostActivity extends AppCompatActivity implements View.OnClickListener {
 
@@ -72,7 +76,6 @@ public class CreatePostActivity extends AppCompatActivity implements View.OnClic
     private boolean isPhotoSelected = false;
 
     private static final String LOG_TAG = "CreatePostActivity";
-
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -244,7 +247,7 @@ public class CreatePostActivity extends AppCompatActivity implements View.OnClic
             File photoFile = null;
 
             try {
-                photoFile = FileManager.createFile(this);
+                photoFile = FileManager.createFile();
             } catch (IOException ex) {
 
             }
@@ -294,6 +297,7 @@ public class CreatePostActivity extends AppCompatActivity implements View.OnClic
 
         if (requestCode == REQUEST_FROM_GALLERY && resultCode == RESULT_OK) {
 
+
             String url = data.getDataString();
 
             Bitmap photo = ImageLoader.getInstance().loadImageSync(url, displayImageOptions());
@@ -311,9 +315,8 @@ public class CreatePostActivity extends AppCompatActivity implements View.OnClic
 
             return;
 
-        }
+        } else if (requestCode == REQUEST_FROM_CAM && resultCode == RESULT_OK) {
 
-        if (requestCode == REQUEST_FROM_CAM && resultCode == RESULT_OK) {
 
             Bitmap photo = ImageLoader.getInstance().loadImageSync(photoUri.toString(), displayImageOptions());
 
@@ -371,12 +374,12 @@ public class CreatePostActivity extends AppCompatActivity implements View.OnClic
 
                                 Intent intent = new Intent();
 
-                                if(position!=-1){
+                                if (position != -1) {
 
-                                    intent.putExtra(ParseSDKConstants.PARSE_MODEL_POSITION_INTENT_KEY,position);
+                                    intent.putExtra(ParseSDKConstants.PARSE_MODEL_POSITION_INTENT_KEY, position);
                                 }
 
-                                setResult(resultCode,intent);
+                                setResult(resultCode, intent);
 
                                 CreatePostActivity.this.finish();
 
@@ -406,6 +409,7 @@ public class CreatePostActivity extends AppCompatActivity implements View.OnClic
 
                 return true;
 
+
         }
 
         return super.onOptionsItemSelected(item);
@@ -417,9 +421,9 @@ public class CreatePostActivity extends AppCompatActivity implements View.OnClic
 
         String postId = getIntent().getStringExtra(ParseSDKConstants.PARSE_KEY_OBJECT_ID);
 
-        position = getIntent().getIntExtra(ParseSDKConstants.PARSE_MODEL_POSITION_INTENT_KEY,-1);
+        position = getIntent().getIntExtra(ParseSDKConstants.PARSE_MODEL_POSITION_INTENT_KEY, -1);
 
-        if (postId != null && !postId.isEmpty()&&position!=-1) {
+        if (postId != null && !postId.isEmpty() && position != -1) {
 
             resultCode = ProfileFragment.RESULT_CODE_POST_EDIT;
 

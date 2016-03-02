@@ -1,201 +1,226 @@
 <?xml version="1.0" encoding="utf-8"?>
-<android.support.design.widget.CoordinatorLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
-    xmlns:tools="http://schemas.android.com/tools"
-    android:layout_width="match_parent"
+<android.support.v4.widget.SwipeRefreshLayout
+    android:id="@+id/fragment_profile_swp"
     android:layout_height="match_parent"
-    android:fitsSystemWindows="false"
-    tools:context="com.fedor.pavel.tattoocommunity.NavigationActivity">
+    android:layout_width="match_parent"
+    xmlns:android="http://schemas.android.com/apk/res/android">
 
-    <android.support.design.widget.AppBarLayout
-        android:id="@+id/fragment_profile_appBarLayout"
+    <android.support.design.widget.CoordinatorLayout
+        xmlns:app="http://schemas.android.com/apk/res-auto"
+        xmlns:tools="http://schemas.android.com/tools"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:fitsSystemWindows="true"
+        android:layout_height="match_parent"
+        android:background="@color/windowBackGround"
+        android:fitsSystemWindows="false"
+        tools:context="com.fedor.pavel.tattoocommunity.NavigationActivity">
 
-        android:theme="@style/AppTheme.AppBarOverlay">
-
-        <android.support.design.widget.CollapsingToolbarLayout
-            android:id="@+id/fragment_profile_collapsing"
-            android:layout_width="match_parent"
-            android:layout_height="216dp"
-            android:fitsSystemWindows="true"
-            app:contentScrim="?attr/colorPrimary"
-            app:layout_scrollFlags="scroll|exitUntilCollapsed|snap"
-            app:titleEnabled="false">
-
-            <ImageView
-                android:id="@+id/fragment_profile_imv_wall"
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:scaleType="centerCrop"
-                app:layout_collapseMode="parallax" />
-
-            <FrameLayout
-                android:id="@+id/fragment_profile_fl_panel"
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:background="#7c303f9f"
-                app:layout_collapseMode="parallax" />
-
-
-            <RelativeLayout
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:paddingLeft="16dp"
-                android:paddingRight="16dp"
-                app:layout_collapseMode="parallax">
-
-
-                <ImageView
-                    android:id="@+id/fragment_profile_imv_photo"
-                    android:layout_width="102dp"
-                    android:layout_height="102dp"
-                    android:layout_alignParentLeft="true"
-                    android:layout_marginTop="16dp"
-                    android:background="@drawable/profile_photo_selector"
-                    android:padding="1dp"
-                    android:scaleType="centerCrop"
-                    android:src="@drawable/user_photo_male" />
-
-                <ImageButton
-                    android:id="@+id/fragment_profile_ib_setWall"
-                    android:layout_width="36dp"
-                    android:layout_height="36dp"
-                    android:layout_alignParentEnd="true"
-                    android:layout_alignParentRight="true"
-                    android:layout_alignTop="@id/fragment_profile_imv_photo"
-                    android:background="@android:color/transparent"
-                    android:gravity="center"
-                    android:scaleType="center"
-                    android:singleLine="true"
-                    android:src="@drawable/ib_camera_selector"
-                    android:textSize="16sp" />
-
-                <com.fedor.pavel.tattoocommunity.views.FillingTextView
-                    android:id="@+id/fragment_profile_tv_name"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_alignBottom="@+id/fragment_profile_imv_photo"
-                    android:layout_toRightOf="@id/fragment_profile_imv_photo"
-                    android:gravity="center"
-                    android:lines="2"
-                    android:paddingLeft="8dp"
-                    android:paddingRight="8dp"
-                    android:text="Фамилия Имя Отчество"
-                    android:textColor="#fff"
-                    android:textSize="20sp" />
-
-                <TextView
-                    android:id="@+id/fragment_profile_tv_phone"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_below="@id/fragment_profile_imv_photo"
-                    android:layout_marginTop="8dp"
-                    android:drawableLeft="@drawable/ic_action_communication_call"
-                    android:gravity="left|center"
-                    android:paddingRight="16dp"
-                    android:singleLine="true"
-                    android:text="0996432916"
-                    android:textColor="#ffff"
-                    android:textSize="16sp" />
-
-
-                <TextView
-                    android:id="@+id/fragment_profile_tv_place"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_below="@id/fragment_profile_tv_phone"
-                    android:drawableLeft="@drawable/ic_action_home"
-                    android:gravity="left|center"
-                    android:paddingRight="16dp"
-                    android:singleLine="true"
-                    android:text="Украина, Нижний новгород"
-                    android:textColor="#ffff"
-                    android:textSize="16sp" />
-
-            </RelativeLayout>
-
-
-        </android.support.design.widget.CollapsingToolbarLayout>
-
-        <com.fedor.pavel.tattoocommunity.views.FillingTextView
-            android:id="@+id/tvTitle"
+        <android.support.design.widget.AppBarLayout
+            android:id="@+id/fragment_profile_appBarLayout"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:gravity="center"
-            android:lines="2"
-            android:textColor="#fff"
-            android:textSize="20sp"
-            tools:text="Имя Фамилия" />
+            android:fitsSystemWindows="true"
+            android:theme="@style/AppTheme.AppBarOverlay">
 
-        <android.support.v7.widget.Toolbar
-            android:id="@+id/fragment_profile_toolbar"
-            android:layout_width="match_parent"
-            android:layout_height="?attr/actionBarSize"
-            app:popupTheme="@style/AppTheme.PopupOverlay">
+            <android.support.design.widget.CollapsingToolbarLayout
+                android:id="@+id/fragment_profile_collapsing"
+                android:layout_width="match_parent"
+                android:layout_height="224dp"
+                android:fitsSystemWindows="true"
+                app:contentScrim="?attr/colorPrimary"
+                app:layout_scrollFlags="scroll|exitUntilCollapsed|snap"
+                app:title="">
+
+                <ImageView
+                    android:id="@+id/fragment_profile_imv_wall"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:scaleType="centerCrop"
+                    app:layout_collapseMode="parallax" />
+
+                <FrameLayout
+                    android:id="@+id/fragment_profile_fl_panel"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:background="#7c303f9f"
+                    app:layout_collapseMode="parallax" />
+
+                <RelativeLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:layout_marginBottom="16dp"
+                    android:layout_marginTop="56dp"
+                    android:paddingLeft="8dp"
+                    android:paddingRight="8dp"
+                    app:layout_collapseMode="parallax">
+
+
+                    <ImageView
+                        android:id="@+id/fragment_profile_imv_photo"
+                        android:layout_width="102dp"
+                        android:layout_height="102dp"
+                        android:layout_alignParentLeft="true"
+                        android:layout_marginTop="16dp"
+                        android:background="@drawable/profile_photo_selector"
+                        android:padding="1dp"
+                        android:scaleType="centerCrop"
+                        android:src="@drawable/user_photo_male" />
+
+
+                    <TextView
+                        android:id="@+id/fragment_profile_tv_phone"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_alignTop="@id/fragment_profile_imv_photo"
+                        android:layout_marginTop="1dp"
+                        android:layout_toRightOf="@id/fragment_profile_imv_photo"
+                        android:drawableLeft="@drawable/ic_action_communication_call"
+                        android:gravity="left|center"
+                        android:singleLine="true"
+                        android:text="0996432916"
+                        android:textColor="#ffff"
+                        android:textSize="16sp" />
+
+
+                    <TextView
+                        android:id="@+id/fragment_profile_tv_place"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_below="@id/fragment_profile_tv_phone"
+                        android:layout_marginTop="4dp"
+                        android:layout_toRightOf="@id/fragment_profile_imv_photo"
+                        android:drawableLeft="@drawable/ic_action_home"
+                        android:gravity="left|center"
+                        android:singleLine="true"
+                        android:textColor="#ffff"
+                        android:textSize="16sp"
+                        tools:text="Страна, Город" />
+
+                    <TextView
+                        android:id="@+id/fragment_profile_tv_email"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_below="@id/fragment_profile_tv_place"
+                        android:layout_marginTop="4dp"
+                        android:layout_toRightOf="@id/fragment_profile_imv_photo"
+                        android:drawableLeft="@drawable/ic_action_email_light"
+                        android:gravity="left|center"
+                        android:singleLine="true"
+                        android:textColor="#ffff"
+                        android:textSize="16sp"
+                        tools:text="xxxxxxxx@xxx.com" />
+
+                    <android.support.v7.widget.AppCompatButton
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_below="@id/fragment_profile_imv_photo"
+                        android:layout_marginTop="8dp"
+                        android:background="@drawable/btn_default_selector"
+                        android:text="Полная информация" />
+
+                </RelativeLayout>
+
+
+                <android.support.v7.widget.Toolbar
+                    android:id="@+id/fragment_profile_toolbar"
+                    android:layout_width="match_parent"
+                    android:layout_height="?attr/actionBarSize"
+                    app:layout_collapseMode="pin"
+                    app:popupTheme="@style/AppTheme.PopupOverlay">
+
+                    <RelativeLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent">
+
+                        <TextView
+                            android:id="@+id/fragment_profile_tv_name"
+                            android:layout_width="match_parent"
+                            android:layout_height="match_parent"
+                            android:gravity="left|center"
+                            android:paddingLeft="8dp"
+                            android:paddingRight="8dp"
+                            android:singleLine="true"
+                            android:text="Фамилия Имя Отчество"
+                            android:textColor="#fff"
+                            android:textSize="16sp" />
+
+                    </RelativeLayout>
+
+                </android.support.v7.widget.Toolbar>
+
+            </android.support.design.widget.CollapsingToolbarLayout>
 
             <LinearLayout
                 android:layout_width="match_parent"
-                android:layout_height="match_parent"
+                android:layout_height="48dp"
+                android:background="@color/colorPrimaryDark"
                 android:orientation="horizontal">
 
-                <ImageButton
+                <Button
                     android:id="@+id/fragment_profile_action_filter"
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
                     android:layout_gravity="center"
-                    android:layout_weight="1"
-                    android:background="@android:color/transparent"
-                    android:src="@drawable/ic_action_filter" />
-
-                <ImageButton
-                    android:id="@+id/fragment_profile_action_grid"
-                    android:layout_width="0dp"
-                    android:layout_height="wrap_content"
-                    android:layout_gravity="center"
-                    android:layout_weight="1"
-                    android:background="@android:color/transparent"
-                    android:src="@drawable/ic_action_grid" />
-
-                <ImageButton
-                    android:id="@+id/fragment_profile_action_list"
-                    android:layout_width="0dp"
-                    android:layout_height="wrap_content"
-                    android:layout_gravity="center"
-                    android:layout_weight="1"
-                    android:background="@android:color/transparent"
-                    android:src="@drawable/ic_action_list" />
-
-                <ImageButton
-                    android:id="@+id/fragment_profile_action_settings"
-                    android:layout_width="0dp"
-                    android:layout_height="wrap_content"
-                    android:layout_gravity="center"
-                    android:layout_weight="1"
+                    android:layout_marginLeft="14dp"
+                    android:layout_weight="2"
                     android:background="@drawable/btn_default_selector"
-                    android:src="@drawable/ic_settings" />
+                    android:drawableLeft="@drawable/ic_action_filter"
+                    android:text="Фильтры"
+                    android:textAllCaps="false" />
+
+                <RadioGroup
+                    android:id="@+id/fragment_profile_rg_list_state"
+                    android:layout_width="0dp"
+                    android:layout_height="match_parent"
+                    android:layout_marginLeft="8dp"
+                    android:layout_weight="3"
+                    android:orientation="horizontal">
+
+                    <RadioButton
+                        android:id="@+id/fragment_profile_action_grid"
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="center"
+                        android:layout_weight="1"
+                        android:background="@drawable/toolbar_button_background"
+                        android:button="@drawable/selector_action_grid"
+                        android:text="Сетка"
+                        android:textSize="14sp" />
+
+                    <RadioButton
+                        android:id="@+id/fragment_profile_action_list"
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="center"
+                        android:layout_weight="1"
+                        android:background="@drawable/toolbar_button_background"
+                        android:button="@drawable/selector_action_list"
+                        android:text="Список"
+                        android:textSize="14sp" />
+
+                </RadioGroup>
+
             </LinearLayout>
 
-        </android.support.v7.widget.Toolbar>
-
-    </android.support.design.widget.AppBarLayout>
+        </android.support.design.widget.AppBarLayout>
 
 
-    <android.support.v7.widget.RecyclerView
-        android:id="@+id/fragment_profile_rv_posts"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        app:layout_behavior="@string/appbar_scrolling_view_behavior" />
+        <android.support.v7.widget.RecyclerView
+            android:id="@+id/fragment_profile_rv_posts"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:paddingTop="8dp"
+            app:layout_behavior="@string/appbar_scrolling_view_behavior"
+            />
 
 
-    <android.support.design.widget.FloatingActionButton
-        android:id="@+id/fragment_profile_fab_add_post"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_margin="@dimen/activity_horizontal_margin"
-        android:src="@drawable/ic_fab_add_post"
-        app:layout_anchor="@id/fragment_profile_rv_posts"
-        app:layout_anchorGravity="bottom|right|end" />
+        <android.support.design.widget.FloatingActionButton
+            android:id="@+id/fragment_profile_fab_add_post"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_margin="@dimen/activity_horizontal_margin"
+            android:src="@drawable/ic_fab_add_post"
+            app:layout_anchor="@id/fragment_profile_rv_posts"
+            app:layout_anchorGravity="bottom|right|end" />
 
-</android.support.design.widget.CoordinatorLayout>
+    </android.support.design.widget.CoordinatorLayout>
+</android.support.v4.widget.SwipeRefreshLayout>

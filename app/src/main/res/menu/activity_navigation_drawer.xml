@@ -21,13 +21,29 @@
         <item
             android:id="@+id/item_nav_favorite"
             android:icon="@drawable/ic_action_favorite"
+            android:enabled="false"
             android:title="@string/item_nav_favorite" />
 
         <item
             android:id="@+id/item_nav_news"
             android:icon="@drawable/ic_news"
+            android:enabled="false"
             android:title="@string/item_nav_news" />
 
     </group>
+
+    <item android:title="Приложение">
+        <menu>
+            <item
+                android:id="@+id/item_nav_app_settings"
+                android:icon="@drawable/ic_menu_manage"
+                android:title="Настройки приложения" />
+            <item
+                android:id="@+id/item_nav_logout"
+                android:icon="@drawable/ic_action_content_clear"
+                android:title="Выйти из акаунта" />
+        </menu>
+    </item>
+
 
 </menu>

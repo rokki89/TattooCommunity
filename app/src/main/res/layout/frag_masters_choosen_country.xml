@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="wrap_content"
+    android:layout_height="wrap_content"
+    android:layout_marginLeft="8dp"
+    android:visibility="gone"
+    android:id="@+id/ll_choice_frag_master_list"
+    android:background="@drawable/back_for_country"
+    android:orientation="horizontal">
+
+
+    <ImageButton
+        android:id="@+id/btn_close_chosen_country"
+        android:scaleType="centerCrop"
+        android:layout_margin="4dp"
+        android:layout_width="25dp"
+        android:layout_height="25dp"
+        android:background="@drawable/toolbar_button_background"
+        android:src="@drawable/ic_cancel" />
+
+    <TextView
+        android:id="@+id/tv_chosen_country"
+        android:layout_marginRight="8dp"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center"
+        android:text="text"/>
+
+
+</LinearLayout>

@@ -35,6 +35,7 @@ public class PostModel extends ParseObject{
 
     public static final String PHOTO_HEIGHT_PARSE_KEY = "photo_height";
 
+
     public PostModel() {
 
     }
@@ -80,6 +81,8 @@ public class PostModel extends ParseObject{
         return getString(USER_ID_PARSE_KEY);
 
     }
+
+
 
     public String getPhotoUrl() {
 

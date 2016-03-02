@@ -1,6 +1,7 @@
 package com.fedor.pavel.tattoocommunity;
 
 import android.app.ProgressDialog;
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentTransaction;
@@ -15,11 +16,10 @@ import android.view.Menu;
 import android.view.MenuItem;
 
 
+import com.fedor.pavel.tattoocommunity.fragments.AllPhotosFragment;
+import com.fedor.pavel.tattoocommunity.fragments.MasterFragment;
 import com.fedor.pavel.tattoocommunity.fragments.ProfileFragment;
-import com.fedor.pavel.tattoocommunity.listeners.OnCountriesLoadListener;
 import com.fedor.pavel.tattoocommunity.models.UserModel;
-import com.fedor.pavel.tattoocommunity.task.LoadCountriesTask;
-import com.fedor.pavel.tattoocommunity.task.LoadPostsTask;
 import com.parse.LogInCallback;
 import com.parse.ParseException;
 import com.parse.ParseUser;
@@ -34,6 +34,10 @@ public class NavigationActivity extends AppCompatActivity
 
     private ProgressDialog progressDialog;
 
+    public static final int REQUEST_LOGIN = 1;
+
+    public static final int LOGIN_RESULT_OK = 200;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
 
@@ -46,38 +50,35 @@ public class NavigationActivity extends AppCompatActivity
 
         prepareNavigationView();
 
-        progressDialog.show();
+        if(UserModel.getCurrentUser()!=null){
 
-        LoadCountriesTask loadCountriesTask = new LoadCountriesTask(this,new OnCountriesLoadListener() {
-            @Override
-            public void loadSuccessful() {
+            try {
+                UserModel.getCurrentUser().fetch();
+            } catch (ParseException e) {
+                e.printStackTrace();
+            }
 
-                if (progressDialog.isShowing()) {
+            replaceFragment(new AllPhotosFragment(), R.id.activity_navigation_fragment_container);
+            selectedNavItem(2);
 
-                    progressDialog.dismiss();
+        }else {
 
-                }
+            try {
 
-                replaceFragment(new ProfileFragment(), R.id.activity_navigation_fragment_container);
+                UserModel.logOut();
+
+                UserModel.logIn("xxx@xxx.com", "1234");
+
+                replaceFragment(new AllPhotosFragment(), R.id.activity_navigation_fragment_container);
+                selectedNavItem(2);
+
+            } catch (ParseException e) {
 
             }
 
-            @Override
-            public void loadFailed(int errorCode) {
+           /* startActivityForResult(new Intent(this, LoginActivity.class),REQUEST_LOGIN);*/
 
-
-                if (progressDialog.isShowing()) {
-
-                    progressDialog.dismiss();
-
-                }
-
-                replaceFragment(new ProfileFragment(), R.id.activity_navigation_fragment_container);
-
-            }
-        });
-
-        loadCountriesTask.execute();
+        }
 
     }
 
@@ -91,7 +92,7 @@ public class NavigationActivity extends AppCompatActivity
 
         navigationView = (NavigationView) findViewById(R.id.nav_view);
         navigationView.setNavigationItemSelectedListener(this);
-        navigationView.setCheckedItem(R.id.item_nav_myWorks);
+//        navigationView.setCheckedItem(R.id.item_nav_myWorks);
     }
 
     private void replaceFragment(Fragment fragment, int containerId) {
@@ -146,18 +147,11 @@ public class NavigationActivity extends AppCompatActivity
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
 
-
         return true;
     }
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
-
-        int id = item.getItemId();
-
-        if (id == R.id.action_settings) {
-            return true;
-        }
 
         return super.onOptionsItemSelected(item);
     }
@@ -172,11 +166,11 @@ public class NavigationActivity extends AppCompatActivity
 
                 if (getSupportFragmentManager().findFragmentById(R.id.activity_navigation_fragment_container) instanceof ProfileFragment) {
 
-
-
                     break;
 
                 }
+
+                selectedNavItem(0);
 
                 replaceFragment(new ProfileFragment(), R.id.activity_navigation_fragment_container);
 
@@ -184,13 +178,31 @@ public class NavigationActivity extends AppCompatActivity
 
             case R.id.item_nav_masters:
 
+                if (getSupportFragmentManager().findFragmentById(R.id.activity_navigation_fragment_container) instanceof MasterFragment) {
+
+                    break;
+
+                }
+
+                selectedNavItem(1);
+
+                replaceFragment(new MasterFragment(), R.id.activity_navigation_fragment_container);
 
                 break;
 
             case R.id.item_nav_sketches:
+                if (getSupportFragmentManager().findFragmentById(R.id.activity_navigation_fragment_container) instanceof AllPhotosFragment) {
 
+                    break;
+
+                }
+
+                selectedNavItem(2);
+
+                replaceFragment(new AllPhotosFragment(), R.id.activity_navigation_fragment_container);
 
                 break;
+
 
             case R.id.item_nav_news:
 
@@ -202,6 +214,18 @@ public class NavigationActivity extends AppCompatActivity
 
                 break;
 
+            case R.id.item_nav_logout:
+
+                if(UserModel.getCurrentUser()!=null){
+
+                    UserModel.logOut();
+
+                    startActivityForResult(new Intent(this, LoginActivity.class),REQUEST_LOGIN);
+
+                }
+
+
+                break;
 
         }
 
@@ -210,5 +234,32 @@ public class NavigationActivity extends AppCompatActivity
         return true;
     }
 
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
 
+
+        if(requestCode == REQUEST_LOGIN && resultCode == LOGIN_RESULT_OK) {
+
+            replaceFragment(new AllPhotosFragment(), R.id.activity_navigation_fragment_container);
+
+
+        }
+
+    }
+
+    private void selectedNavItem(int index){
+
+        int navSize = navigationView.getMenu().size();
+
+        for(int i=0; i<navSize; i++){
+
+            navigationView.getMenu().getItem(i).setChecked(false);
+
+        }
+
+            navigationView.getMenu().getItem(index).setChecked(true);
+
+
+    }
 }

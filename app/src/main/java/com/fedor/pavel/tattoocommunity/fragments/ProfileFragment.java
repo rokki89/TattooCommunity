@@ -1,3 +1,4 @@
+
 package com.fedor.pavel.tattoocommunity.fragments;
 
 
@@ -14,15 +15,20 @@ import android.support.annotation.Nullable;
 import android.support.design.widget.AppBarLayout;
 import android.support.design.widget.FloatingActionButton;
 import android.support.v4.app.Fragment;
+import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.app.AppCompatActivity;
+import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
 import android.view.LayoutInflater;
+import android.view.Menu;
+import android.view.MenuInflater;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.ImageButton;
 import android.widget.ImageView;
+import android.widget.RadioGroup;
 import android.widget.TextView;
 
 
@@ -39,7 +45,6 @@ import com.fedor.pavel.tattoocommunity.models.PlaceModel;
 import com.fedor.pavel.tattoocommunity.models.PostModel;
 import com.fedor.pavel.tattoocommunity.models.UserModel;
 import com.fedor.pavel.tattoocommunity.task.LoadPostsTask;
-import com.fedor.pavel.tattoocommunity.views.FillingTextView;
 import com.nostra13.universalimageloader.core.DisplayImageOptions;
 import com.nostra13.universalimageloader.core.ImageLoader;
 import com.nostra13.universalimageloader.core.assist.ImageScaleType;
@@ -53,9 +58,7 @@ import java.io.IOException;
 import java.util.List;
 
 public class ProfileFragment extends Fragment implements AppBarLayout.OnOffsetChangedListener,
-        OnPostLoadListener, View.OnClickListener, OnLoadNexDataPartListener, DialogInterface.OnClickListener {
-
-    private FillingTextView tvTitle, tvName;
+        OnPostLoadListener, View.OnClickListener, OnLoadNexDataPartListener, DialogInterface.OnClickListener, RadioGroup.OnCheckedChangeListener {
 
     private ImageView imvPhoto, imvWall;
 
@@ -65,9 +68,9 @@ public class ProfileFragment extends Fragment implements AppBarLayout.OnOffsetCh
 
     private FloatingActionButton fbAddPost;
 
-    private TextView tvPhone, tvPlace;
+    private TextView tvPhone, tvPlace, tvName, tvEmail;
 
-    private ImageButton ibSettings, ibSetWall;
+    private RadioGroup rgListState;
 
     private UserModel user;
 
@@ -76,6 +79,8 @@ public class ProfileFragment extends Fragment implements AppBarLayout.OnOffsetCh
     private String city;
 
     private Uri photoUri;
+
+    private SwipeRefreshLayout swp;
 
     private PostRecyclerViewAdapter postsAdapter;
 
@@ -105,6 +110,12 @@ public class ProfileFragment extends Fragment implements AppBarLayout.OnOffsetCh
 
     public static final int RESULT_PROFILE_EDIT_OK = -5;
 
+    @Override
+    public void onCreate(@Nullable Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+
+        setHasOptionsMenu(true);
+    }
 
     @Nullable
     @Override
@@ -118,7 +129,7 @@ public class ProfileFragment extends Fragment implements AppBarLayout.OnOffsetCh
 
                 PlaceModel place = user.getPlace();
 
-                if (place!=null) {
+                if (place != null) {
 
                     place.fetchIfNeeded();
 
@@ -141,7 +152,7 @@ public class ProfileFragment extends Fragment implements AppBarLayout.OnOffsetCh
 
         prepareViews();
 
-        findPosts();
+        findPosts(0);
 
         return view;
     }
@@ -153,9 +164,7 @@ public class ProfileFragment extends Fragment implements AppBarLayout.OnOffsetCh
 
         ((AppCompatActivity) getActivity()).getSupportActionBar().setDisplayShowTitleEnabled(false);
 
-        tvTitle = (FillingTextView) view.findViewById(R.id.tvTitle);
-
-        tvName = (FillingTextView) view.findViewById(R.id.fragment_profile_tv_name);
+        tvName = (TextView) view.findViewById(R.id.fragment_profile_tv_name);
 
         tvPhone = (TextView) view.findViewById(R.id.fragment_profile_tv_phone);
 
@@ -163,7 +172,9 @@ public class ProfileFragment extends Fragment implements AppBarLayout.OnOffsetCh
 
         rvPosts = (RecyclerView) view.findViewById(R.id.fragment_profile_rv_posts);
 
-        ibSettings = (ImageButton) view.findViewById(R.id.fragment_profile_action_settings);
+        rgListState = (RadioGroup) view.findViewById(R.id.fragment_profile_rg_list_state);
+
+        tvEmail = (TextView) view.findViewById(R.id.fragment_profile_tv_email);
 
         fbAddPost = (FloatingActionButton) view.findViewById(R.id.fragment_profile_fab_add_post);
 
@@ -171,34 +182,42 @@ public class ProfileFragment extends Fragment implements AppBarLayout.OnOffsetCh
 
         tvPlace = (TextView) view.findViewById(R.id.fragment_profile_tv_place);
 
-        ibSetWall = (ImageButton) view.findViewById(R.id.fragment_profile_ib_setWall);
-
         imvWall = (ImageView) view.findViewById(R.id.fragment_profile_imv_wall);
 
         rvPosts.setAdapter(postsAdapter);
 
         rvPosts.setLayoutManager(new LinearLayoutManager(getContext()));
 
+        swp = (SwipeRefreshLayout) view.findViewById(R.id.fragment_profile_swp);
 
     }
 
     private void prepareViews() {
 
-        filDataFromCurrentUser();
+        rgListState.setOnCheckedChangeListener(this);
 
-        tvTitle.setVisibility(View.GONE);
+        rgListState.check(R.id.fragment_profile_action_list);
+
+        swp.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
+            @Override
+            public void onRefresh() {
+
+                findPosts(0);
+
+            }
+        });
+
+        swp.setColorSchemeColors(R.color.colorPrimaryDark);
+
+        filDataFromCurrentUser();
 
         appBarLayout.addOnOffsetChangedListener(this);
 
         fbAddPost.setOnClickListener(this);
 
-        ibSettings.setOnClickListener(this);
-
         postsAdapter.loadDataWithPagination(rvPosts, this);
 
         imvPhoto.setOnClickListener(this);
-
-        ibSetWall.setOnClickListener(this);
 
         ImageLoader.getInstance().displayImage(user.getPhotoUrl(), imvPhoto, displayImageOptions(R.drawable.user_photo_male));
 
@@ -210,9 +229,9 @@ public class ProfileFragment extends Fragment implements AppBarLayout.OnOffsetCh
 
         tvName.setText(user.getFullName());
 
-        tvTitle.setText(user.getFullName());
-
         tvPhone.setText(user.getPhone());
+
+        tvEmail.setText(user.getEmail());
 
         String placeName = "-";
 
@@ -238,12 +257,11 @@ public class ProfileFragment extends Fragment implements AppBarLayout.OnOffsetCh
 
     }
 
-    private void findPosts() {
+    private void findPosts(int offset) {
 
-        LoadPostsTask loadPostsTask = new LoadPostsTask(getContext(), this);
+        LoadPostsTask loadPostsTask = new LoadPostsTask(getContext(), true, this);
 
-        loadPostsTask.execute(postsAdapter.getDataLimit(), postsAdapter.getOnlyItemCount());
-
+        loadPostsTask.execute(postsAdapter.getDataLimit(), offset);
 
     }
 
@@ -296,20 +314,36 @@ public class ProfileFragment extends Fragment implements AppBarLayout.OnOffsetCh
     @Override
     public void onOffsetChanged(AppBarLayout appBarLayout, int verticalOffset) {
 
-        tvTitle.offsetTextSizeRatio(verticalOffset, appBarLayout, true);
+        Log.d(LOG_TAG, "verticalOffset = " + verticalOffset);
 
-        tvName.offsetTextSizeRatio(verticalOffset, appBarLayout, false);
+        if (verticalOffset == 0) {
+
+            swp.setEnabled(true);
+
+
+        } else {
+
+            swp.setEnabled(false);
+
+
+        }
 
     }
 
     @Override
     public void onPostsLoaded(List<PostModel> posts) {
 
+        if (swp.isRefreshing()) {
+
+            postsAdapter.clearItems();
+
+            swp.setRefreshing(false);
+
+        }
+
         if (postsAdapter.isLoadingData()) {
 
             postsAdapter.setIsLoadingData(false);
-
-            postsAdapter.notifyItemChanged(postsAdapter.getItemCount() - 1);
 
         }
 
@@ -317,10 +351,7 @@ public class ProfileFragment extends Fragment implements AppBarLayout.OnOffsetCh
 
             postsAdapter.addAllItems(posts);
 
-            rvPosts.scrollToPosition(postsAdapter.getOnlyItemCount() - posts.size());
-
         }
-
 
     }
 
@@ -335,15 +366,6 @@ public class ProfileFragment extends Fragment implements AppBarLayout.OnOffsetCh
 
                 break;
 
-            case R.id.fragment_profile_action_settings:
-
-
-                Intent intent = new Intent(getContext(), ProfileSettingsActivity.class);
-
-                startActivityForResult(intent, REQUEST_PROFILE_CONFIG);
-
-                break;
-
             case R.id.fragment_profile_imv_photo:
 
                 if (!isRemovingPhoto) {
@@ -351,18 +373,6 @@ public class ProfileFragment extends Fragment implements AppBarLayout.OnOffsetCh
                     DialogManager.showPhotoPikerDialog(getContext(), this, "Редактировать аватарку");
 
                     isWallEdit = false;
-                }
-
-                break;
-
-            case R.id.fragment_profile_ib_setWall:
-
-                if (!isRemovingPhoto) {
-
-                    DialogManager.showPhotoPikerDialog(getContext(), this, "Редактировать обложку");
-
-                    isWallEdit = true;
-
                 }
 
                 break;
@@ -388,7 +398,7 @@ public class ProfileFragment extends Fragment implements AppBarLayout.OnOffsetCh
 
             postsAdapter.clearItems();
 
-            findPosts();
+            findPosts(0);
 
             return;
 
@@ -463,18 +473,12 @@ public class ProfileFragment extends Fragment implements AppBarLayout.OnOffsetCh
     @Override
     public void getNextPart() {
 
-        findPosts();
+        findPosts(postsAdapter.getOnlyItemCount());
 
     }
 
     @Override
     public void onClick(DialogInterface dialog, int which) {
-
-        int[][] i = new int[10][10];
-
-        int i1 = i[0].length;
-
-        int i2 = i.length;
 
 
         switch (which) {
@@ -541,7 +545,7 @@ public class ProfileFragment extends Fragment implements AppBarLayout.OnOffsetCh
             File photoFile = null;
 
             try {
-                photoFile = FileManager.createFile(getContext());
+                photoFile = FileManager.createFile();
             } catch (IOException ex) {
 
             }
@@ -602,5 +606,59 @@ public class ProfileFragment extends Fragment implements AppBarLayout.OnOffsetCh
 
         super.onDestroy();
 
+    }
+
+    @Override
+    public void onCheckedChanged(RadioGroup group, int checkedId) {
+
+        switch (checkedId) {
+
+            case R.id.fragment_profile_action_grid:
+
+                rvPosts.setLayoutManager(new GridLayoutManager(getContext(), 3));
+                postsAdapter.loadDataWithPagination(rvPosts, this);
+                postsAdapter.notifyDataSetChanged();
+
+                break;
+
+
+            case R.id.fragment_profile_action_list:
+
+                rvPosts.setLayoutManager(new LinearLayoutManager(getContext()));
+                postsAdapter.loadDataWithPagination(rvPosts, this);
+                postsAdapter.notifyDataSetChanged();
+
+                break;
+
+        }
+
+
+    }
+
+    @Override
+    public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
+        inflater.inflate(R.menu.navigation, menu);
+        super.onCreateOptionsMenu(menu, inflater);
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+
+        Log.d(LOG_TAG, "onOptionsItemSelected");
+
+        switch (item.getItemId()) {
+
+            case R.id.action_profile_settings:
+
+                Intent intent = new Intent(getContext(), ProfileSettingsActivity.class);
+
+                startActivityForResult(intent, REQUEST_PROFILE_CONFIG);
+
+                break;
+
+        }
+
+
+        return super.onOptionsItemSelected(item);
     }
 }

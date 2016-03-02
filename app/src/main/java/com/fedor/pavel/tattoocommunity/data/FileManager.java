@@ -1,7 +1,7 @@
 package com.fedor.pavel.tattoocommunity.data;
 
 
-import android.content.Context;
+
 import android.os.Environment;
 
 
@@ -14,7 +14,7 @@ import java.util.Date;
 public class FileManager {
 
 
-    public static File createFile(Context context) throws IOException{
+    public static File createFile() throws IOException{
 
         File mediaStorageDir = new File(Environment.getExternalStoragePublicDirectory(
                 Environment.DIRECTORY_PICTURES),"TattooCommunity");
